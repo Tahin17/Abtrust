@@ -1,0 +1,43 @@
+{
+  "generated_utc": "2026-10-18 16:56",
+  "python": "3.10.11",
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "studies": {
+    "type1_coverage": {
+      "question": "Does the Welch test hold its 5% error rate and 95% coverage, even on heavy-tailed revenue?",
+      "headline": "Welch false-positive rate 3.9%-5.1% and 95% CI coverage 94.4%-95.9% across metrics and sizes.",
+      "seconds": 18.4
+    },
+    "peeking": {
+      "question": "How does naive peeking compare with a working-normal mSPRT approximation?",
+      "headline": "Peeking 100 times inflates false positives to 38.1%; working-normal mSPRT has 1.6% empirically (not a formal guarantee).",
+      "seconds": 90.8
+    },
+    "cuped": {
+      "question": "Does CUPED reduce variance as much as theory says, without inflating false positives?",
+      "headline": "At rho=0.7 CUPED shrinks the SE to 0.73x (theory 0.71x) and lifts power from 50% to 79% with false-positive rate 5.3%.",
+      "seconds": 55.5
+    },
+    "ratio_metrics": {
+      "question": "What happens if a ratio metric is analysed per event instead of per user?",
+      "headline": "At ICC=0.10, per-session analysis has a 14.5% false-positive rate; the delta method has 5.1%.",
+      "seconds": 45.6
+    },
+    "srm": {
+      "question": "How sensitive is the SRM check, and how often does it false-alarm?",
+      "headline": "SRM check false-alarm rate 0.10% at threshold 0.001; detects a 50.5/49.5 split at n=100k 45% of the time.",
+      "seconds": 9.3
+    },
+    "power_calibration": {
+      "question": "Do 80%-power designs actually deliver 80% power?",
+      "headline": "Planned 80% power -> empirical 79.4%, 80.2%, 79.8%.",
+      "seconds": 3.3
+    },
+    "multiple_testing": {
+      "question": "How often does a many-metric readout produce a false win?",
+      "headline": "With 14 null metrics, P(at least one false win) is 52% uncorrected, 5.7% with Holm, 5.8% with Benjamini-Hochberg.",
+      "seconds": 64.8
+    }
+  }
+}

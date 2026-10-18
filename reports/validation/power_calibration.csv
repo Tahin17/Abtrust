@@ -1,0 +1,4 @@
+design,method,n_per_arm,planned_power,empirical_power,mcse,n_sims
+conversion 10% -> 11%,welch,14749,0.8,0.794,0.0090433400909177,2000
+revenue (zero-inflated lognormal) +20%,welch,24782,0.8,0.802,0.0178211110764733,500
+"CUPED-planned, rho=0.6 (n 1,570 -> 1,005)",cuped,1005,0.8,0.7975,0.0089859264964721,2000
