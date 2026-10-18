@@ -7,11 +7,21 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest]
         python-version: ["3.10", "3.11", "3.12", "3.13"]
+        include:
+          - os: windows-latest
+            python-version: "3.10"
+          - os: windows-latest
+            python-version: "3.13"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -27,6 +37,9 @@ jobs:
 
   validation-smoke:
     runs-on: ubuntu-latest
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -38,11 +51,18 @@ jobs:
         run: abtrust validate --scale 0.05 --out /tmp/validation --no-figures
       - name: Case study runs
         run: python scripts/case_study.py
+      - name: Supplemental stress smoke (not published full-budget evidence)
+        run: abtrust stress --simulations 50 --out /tmp/stress
 
   app-smoke:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     env:
       ABTRUST_RUN_STREAMLIT_INTEGRATION: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

@@ -1,5 +1,17 @@
 # Changelog — abtrust v0.3.0
 
+## Local hardening and reproducibility — 19 October 2026
+
+- CLI declarations reject undeclared metrics, conflicting roles and duplicate/misplaced harm margins with readable errors.
+- Planning and sequential APIs reject nonfinite or invalid numerical settings. Planning preserves at least two observations per arm; zero-effect power remains defined.
+- Lin regression uses scaled covariates and a direct design pseudoinverse, checks treatment-contrast estimability and HC2 leverage, and uses rank-based residual degrees of freedom. Constant/redundant covariates remain supported when estimable.
+- Simulation manifests include actual budgets, seeds, configuration, versions, Git/source identity and raw CSV checksums. `abtrust render` preserves raw data and its original manifest while recording a separate rendering timestamp.
+- CLI, simulated checkout and real Hillstrom analyses write explicitly labeled provenance manifests. The checkout JSON's naive ratio now refers to the same buggy-log population as the narrative.
+- Two separate supplemental stress studies examine rare outcomes, unequal allocation, correlated covariates, deterministic data, deliberately invalid selection and known-SD Gaussian monitoring. The sparse binary coverage failure is documented rather than hidden.
+- Added a one-command local verifier, generated synthetic browser fixtures, learning/demo documentation, clean-install and distribution checks, and Windows CI configurations.
+- Packaging uses an SPDX license expression; the source archive includes the dashboard, scripts, sample, docs and reports, while excluding cached Hillstrom data and environments. The wheel contains the library/CLI.
+- The existing Git baseline and configured remote were preserved; publication and remote CI execution remain separate release work.
+
 ## Post-review corrections — 18 October 2026
 
 - Bounded sequential validation now calls the actual bounded API separately for each monitoring schedule. Each schedule spends its error budget from its own first look; smaller schedules no longer inherit the 100-look weights.

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "analyzed_at_utc": "2026-10-18T19:00:54+00:00",
+  "data_kind": "real_data",
+  "settings": {
+    "alpha": 0.05,
+    "correction": "holm",
+    "expected_split": {
+      "No E-Mail": 0.3333333333333333,
+      "Mens E-Mail": 0.3333333333333333,
+      "Womens E-Mail": 0.3333333333333333
+    },
+    "covariates": [
+      "history",
+      "recency"
+    ],
+    "primary": "visit",
+    "unit_ids_verified": false,
+    "guardrails_configured": false,
+    "comparison_families": {
+      "control_contrasts": 8,
+      "exploratory_pairwise": 4,
+      "exploratory_subgroups": 8
+    }
+  },
+  "runtime": {
+    "python": "3.10.11",
+    "platform": "Windows",
+    "dependencies": {
+      "abtrust": "0.3.0",
+      "numpy": "2.2.6",
+      "scipy": "1.15.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.9",
+      "streamlit": "1.65.0"
+    },
+    "git": {
+      "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+      "dirty": true
+    },
+    "source_sha256": "7df4f02e3f9a7e4aca693945196d9a9ec8f9e44d1c72d4ecd6844db6139f5992"
+  },
+  "input": {
+    "file": "hillstrom.csv",
+    "sha256": "9bd6dd74628d14b652cef843df5e52c07f9024706dc00ece13855a85c4543b41"
+  }
+}

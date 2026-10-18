@@ -1,0 +1,21 @@
+{
+  "rendered_at_utc": "2026-10-18T19:14:25+00:00",
+  "runtime": {
+    "python": "3.10.11",
+    "platform": "Windows",
+    "dependencies": {
+      "abtrust": "0.3.0",
+      "numpy": "2.2.6",
+      "scipy": "1.15.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.9",
+      "streamlit": "1.65.0"
+    },
+    "git": {
+      "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+      "dirty": true
+    },
+    "source_sha256": "203f753271aefc9a14bf634897d0460a71d9e9646bd438b0053b791e3c386893"
+  },
+  "simulation_manifest_sha256": "f3a39db7e0eefb7c58a17efc61b242461440f81db654796f523ac6a5598cf0e2"
+}

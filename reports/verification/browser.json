@@ -1,0 +1,38 @@
+{
+  "date_local": "2026-10-19",
+  "synthetic_20_80_upload": "passed with expected 20/80 SRM result",
+  "duplicate_id_upload": "rejected",
+  "invalid_guardrail_margins": [
+    {
+      "input": "abc",
+      "errors": [
+        "unsubscribed: provide a numeric absolute harm margin, for example 0.001."
+      ]
+    },
+    {
+      "input": "-1",
+      "errors": [
+        "unsubscribed: harm margin must be finite and nonnegative."
+      ]
+    },
+    {
+      "input": "nan",
+      "errors": [
+        "unsubscribed: harm margin must be finite and nonnegative."
+      ]
+    }
+  ],
+  "zero_allocation": [
+    "All allocation percentages must be finite and greater than zero."
+  ],
+  "zero_harm_margins": "safety remained unproven",
+  "higher_is_better_bound": "downloaded bound 0.001867 matched core calculation",
+  "unverified_upload_cases": [
+    "empty file",
+    "missing arm label",
+    "missing outcomes",
+    "infinite outcome"
+  ],
+  "one_column_upload": "rejected with readable arm/outcome schema error",
+  "limitation": "Browser file transfers took minutes despite short timeouts; remaining cases have automated coverage only."
+}

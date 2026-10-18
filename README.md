@@ -4,7 +4,7 @@
 
 > v0.3.0 adds planned allocation settings for unequal experiments, safer CSV/guardrail handling, clearer results, and stronger tests. **This is a research/portfolio toolkit, not deployment certification.**
 
-[![CI](https://github.com/KingKarim5/abtrust/actions/workflows/ci.yml/badge.svg)](https://github.com/KingKarim5/abtrust/actions/workflows/ci.yml)
+[![CI](https://github.com/Tahin17/Abtrust/actions/workflows/ci.yml/badge.svg)](https://github.com/Tahin17/Abtrust/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.10%E2%80%933.13-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -58,9 +58,9 @@ planted traps. [Full write-up](reports/case_study.md).
 ## Quickstart
 
 ```bash
-git clone https://github.com/KingKarim5/abtrust.git && cd abtrust
+git clone https://github.com/Tahin17/Abtrust.git && cd Abtrust
 pip install -e ".[dev]"          # core needs only numpy, scipy, pandas
-pytest                           # 87 tests (+ 1 optional Streamlit AppTest)
+pytest                           # 121 tests (+ 1 optional Streamlit AppTest)
 ```
 
 **Plan** an experiment:
@@ -132,6 +132,25 @@ python scripts/case_study.py        # case study + figures + data/sample_experim
 python scripts/hillstrom.py         # real data (below)
 ```
 
+The full local workflow is also available as one command:
+
+```powershell
+python scripts/verify.py --integration --full
+```
+
+This records actual check exit codes, runs the seven full-budget core studies and separate supplemental
+stress studies, and regenerates the application reports. It uses the existing cached Hillstrom CSV when
+available and records whether real data was run. See [reproducibility instructions](docs/REPRODUCIBILITY.md).
+
+```powershell
+abtrust stress --simulations 2000    # supplemental diagnostics in reports/stress/
+abtrust render --out reports        # presentation only; verifies and preserves raw results
+python scripts/dashboard_fixtures.py  # explicitly synthetic browser fixtures in scratch_qa/
+```
+
+Study manifests record actual seeds, budgets, settings, software versions, source hashes and CSV checksums.
+The [learning walkthrough and three-minute demo](docs/LEARNING_AND_DEMO.md) explains the results from first principles.
+
 ## Real data: the Hillstrom e-mail experiment
 
 [`scripts/hillstrom.py`](scripts/hillstrom.py) analyses Kevin Hillstrom's public MineThatData experiment:
@@ -153,6 +172,9 @@ The readout displays **unadjusted confidence intervals**, separately corrected p
 
 - **Many fixed-horizon estimates use normal approximations.** Validated down to 500 users per arm on heavy-tailed revenue; for
   much smaller tests use a permutation test.
+- **Rare-event intervals need particular caution.** In the supplemental 0.2%-baseline, 400-users-per-arm
+  scenario, nominal 95% Welch intervals covered the nonzero effect only 84.75% of the time. This approximation
+  is not established as reliable in that sparse setting; see [the stress report](reports/stress/validation.md).
 - **The decision rule is deliberately conservative**: an SRM or excessive missingness blocks all conclusions; 
   missing predeclared guardrail margins lead to REVIEW REQUIRED, and Holm correction spans arm x metric comparisons. Teams that pre-register a single
   primary metric can relax this with `correction="none"` on that metric alone.

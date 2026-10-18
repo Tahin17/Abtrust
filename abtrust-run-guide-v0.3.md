@@ -2,7 +2,11 @@
 
 This guide applies to **abtrust v0.3.0**, which adds configurable planned allocations, safer Streamlit inputs, strengthened CSV checks, and more explicit Hillstrom caveats.
 
-## 1. Update without losing your current project
+## 1. Historical ZIP upgrade instructions
+
+The current checkout already contains these changes and has Git history. **Do not rename or replace it to run verification.** Continue with section 2 using the existing environment, or use the clean `.venv_verify` created during verification. See `docs/REPRODUCIBILITY.md` for the current workflow.
+
+The following steps apply only when upgrading an older extracted copy:
 
 1. In VS Code, press **Ctrl+C** in the terminal running the Streamlit app.
 2. In File Explorer, rename `D:\Programming\abtrust` to `D:\Programming\abtrust-v0.2-backup`.
@@ -40,7 +44,7 @@ ruff check .
 python -m pytest
 ```
 
-Expected version: **0.3.0**. After the 18 October fixes, **88 tests passed with the actual Streamlit AppTest enabled** on Windows/Python 3.10.11. Without the opt-in variable, expect **87 passed, 1 skipped**. See `docs/RELEASE_VERIFICATION.md` for the current environment and remaining limits.
+Expected version: **0.3.0**. On 19 October, **122 tests passed with the actual Streamlit AppTest enabled** in a fresh Windows/Python 3.10.11 environment. Without the opt-in variable, expect **121 passed, 1 skipped**. See `docs/RELEASE_VERIFICATION.md` for the current environment and remaining limits.
 
 The extra AppTest requires the installed app dependency and can be run with:
 
@@ -51,6 +55,12 @@ Remove-Item Env:\ABTRUST_RUN_STREAMLIT_INTEGRATION
 ```
 
 This automated UI smoke test is also included as a **separate GitHub Actions job**. It is a supplement, not a substitute for checking the browser interactions.
+
+The complete full-budget workflow is also available as one command (allow several minutes):
+
+```powershell
+.\.venv_verify\Scripts\python.exe scripts/verify.py --integration --full
+```
 
 ## 4. Reproduce the reports
 

@@ -1,0 +1,15 @@
+{
+  "raw_results_unchanged": true,
+  "checked_files": {
+    "cuped.csv": "363c56d5aa27016baddf7f81ef2a819f23bf1053559bfbf4140ef7f31b5384eb",
+    "multiple_testing.csv": "864967afc191d215e39dbebcefdcbf4f0277093d939156aa2fa7f724cf964d2f",
+    "peeking.csv": "8b8d8421fc7c1e953cdf79e2c0b87b1992721e34fdba39fa95c8d4c5956183f5",
+    "power_calibration.csv": "776476dbdd67d574af3b53047c075c02e9fe29260454a553d67e539e6ab0149e",
+    "ratio_metrics.csv": "7084ac774f3c866ae975a420a3fbe5beb8c5daedc0d0d0e24d6d282fb895d66f",
+    "srm.csv": "0a1a102562b06fe0a81a0dec50a3dd28f84ba5313d1932d65a6673fa614d3611",
+    "type1_coverage.csv": "83af5fb1785e4a1b6efb17cb3d261c1c594a7596b427f40aa75a1e90e0c64bcd",
+    "summary.json": "f3a39db7e0eefb7c58a17efc61b242461440f81db654796f523ac6a5598cf0e2"
+  },
+  "core_studies": 7,
+  "supplemental_studies": 2
+}

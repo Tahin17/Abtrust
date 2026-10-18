@@ -6,6 +6,10 @@ build/
 dist/
 .venv/
 .venv_v03/
+.venv_verify/
+.venv_wheel/
+scratch_reports/
+scratch_qa/
 venv/
 .pytest_cache/
 .ruff_cache/

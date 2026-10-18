@@ -15,6 +15,8 @@ from dataclasses import dataclass
 
 from scipy import stats
 
+from ._inputs import finite_scalar, positive_integer, positive_scalar
+
 __all__ = [
     "SampleSize",
     "sample_size_mean",
@@ -40,8 +42,7 @@ class SampleSize:
 
     def days(self, daily_units: float) -> float:
         """Days needed if ``daily_units`` new units enter the experiment per day."""
-        if daily_units <= 0:
-            raise ValueError("daily_units must be positive")
+        daily_units = positive_scalar(daily_units, "daily_units")
         return self.total / daily_units
 
     def __str__(self) -> str:
@@ -56,8 +57,7 @@ def _validate(alpha: float, power: float, ratio: float, variance_reduction: floa
         raise ValueError("alpha must be in (0, 1)")
     if not 0 < power < 1:
         raise ValueError("power must be in (0, 1)")
-    if ratio <= 0:
-        raise ValueError("ratio (n_treatment / n_control) must be positive")
+    positive_scalar(ratio, "ratio (n_treatment / n_control)")
     if not 0 <= variance_reduction < 1:
         raise ValueError("variance_reduction must be in [0, 1)")
 
@@ -86,12 +86,14 @@ def sample_size_mean(
     sd_treatment: treatment-arm standard deviation if it differs from ``sd``.
     """
     _validate(alpha, power, ratio, variance_reduction)
-    if mde == 0 or sd <= 0:
-        raise ValueError("mde must be non-zero and sd positive")
-    sd_t = sd if sd_treatment is None else sd_treatment
+    mde = finite_scalar(mde, "mde")
+    if mde == 0:
+        raise ValueError("mde must be non-zero")
+    sd = positive_scalar(sd, "sd")
+    sd_t = sd if sd_treatment is None else positive_scalar(sd_treatment, "sd_treatment")
     scale = 1.0 - variance_reduction
     n_c = _z_sum(alpha, power) ** 2 * scale * (sd**2 + sd_t**2 / ratio) / mde**2
-    n_c = math.ceil(n_c)
+    n_c = max(2, math.ceil(2 / ratio), math.ceil(n_c))
     return SampleSize(n_c, math.ceil(n_c * ratio), abs(mde), alpha, power)
 
 
@@ -110,6 +112,9 @@ def sample_size_proportion(
     """
     if not 0 < baseline < 1:
         raise ValueError("baseline must be a rate in (0, 1)")
+    mde = finite_scalar(mde, "mde")
+    if mde == 0:
+        raise ValueError("mde must be non-zero")
     delta = baseline * mde if relative else mde
     p_t = baseline + delta
     if not 0 < p_t < 1:
@@ -118,12 +123,13 @@ def sample_size_proportion(
     var_c = baseline * (1 - baseline)
     var_t = p_t * (1 - p_t)
     n_c = math.ceil(_z_sum(alpha, power) ** 2 * (var_c + var_t / ratio) / delta**2)
+    n_c = max(2, math.ceil(2 / ratio), n_c)
     return SampleSize(n_c, math.ceil(n_c * ratio), abs(delta), alpha, power)
 
 
 def _se(n_control: int, sd: float, ratio: float, variance_reduction: float) -> float:
-    if n_control < 2:
-        raise ValueError("n_control must be at least 2")
+    n_control = positive_integer(n_control, "n_control", minimum=2)
+    sd = positive_scalar(sd, "sd")
     return math.sqrt((1 - variance_reduction) * sd**2 * (1 / n_control + 1 / (ratio * n_control)))
 
 
@@ -150,6 +156,7 @@ def power_mean(
 ) -> float:
     """Probability that a two-sided test rejects when the true effect is ``mde``."""
     _validate(alpha, 0.5, ratio, variance_reduction)
+    mde = finite_scalar(mde, "mde")
     se = _se(n_control, sd, ratio, variance_reduction)
     z = stats.norm.ppf(1 - alpha / 2)
     shift = abs(mde) / se

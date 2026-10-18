@@ -1,0 +1,374 @@
+\hl{This chapter fixes what the system must do, the resources it needs,
+and the societal, environmental, ethical, economic and practical
+constraints under which it was designed and evaluated. The framework
+answers questions written in Standard Bangla, Chittagonian or Sylheti,
+in Bangla script or romanized form, about three domains (school
+education, general knowledge and healthcare), and always responds in
+Standard Bangla.}
+
+\section{Final Specifications and Requirements}\label{final-specifications-and-requirements}
+
+\hl{The final system routes each question by language variety and
+domain, normalizes dialectal and romanized questions into Standard
+Bangla, and answers them with domain-specific retrieval-augmented
+generation. It is designed to give grounded Standard Bangla answers to
+users of Standard Bangla, Chittagonian and Sylheti, and to ask for
+clarification, abstain or refer the user to a doctor when an answer
+would not be reliable.}
+
+\subsection{Functional Requirements}\label{functional-requirements}
+
+\hl{The final system satisfies the following functional requirements
+(FR).}
+
+\begin{longtable}{@{}p{0.080\textwidth}p{0.370\textwidth}p{0.220\textwidth}p{0.220\textwidth}@{}}
+\caption{Functional requirements, implementing components and verifying experiments.}\label{tab:functional-requirements}\\
+\toprule
+\textbf{ID} & \textbf{Requirement} & \textbf{Implemented by} & \textbf{Verified by} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{ID} & \textbf{Requirement} & \textbf{Implemented by} & \textbf{Verified by} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+FR1 & Accept questions in Standard Bangla, Chittagonian and Sylheti, in Bangla script or romanized & script detection + dialect router & router test set, end-to-end test \\
+FR2 & Identify the language variety of each question & calibrated TF-IDF dialect router & per-class F1, unseen dialects \\
+FR3 & Rewrite dialectal or romanized questions into Standard Bangla, preserving symptoms, numbers and named entities & LoRA normalization expert & chrF++/BLEU on held-out pairs \\
+FR4 & Decide the domain (education, general, medical, out-of-scope) & domain router & per-class F1, end-to-end domain accuracy \\
+FR5 & Ground every answer in retrieved evidence from the domain knowledge base & per-domain retriever (BM25 or dense) & hit@k, MRR, nDCG@10 \\
+FR6 & Answer with a domain-specific expert on one shared base model & Mixture-of-Adapters (LoRA experts) & F1 / chrF++ per domain, pooled-adapter ablation \\
+FR7 & Answer, ask for clarification, or abstain when information is missing or the question is out of scope & clarification/\allowbreak{}abstention controller & controller test set, end-to-end behaviour table \\
+FR8 & Never give emergency, dosage or prescription advice; always refer to a registered doctor & rule-based medical safety layer & safety test set, referral rate \\
+FR9 & Respond in Standard Bangla with a transparent trace (variety, normalized question, domain, decision, evidence) & pipeline output & chatbot demonstration \\
+FR10 & Produce every table, figure and statistical test of the thesis reproducibly, reported separately for each variety & staged notebooks + manifests & regenerated result files \\
+\bottomrule
+\end{longtable}
+
+\subsection{Non-Functional Requirements}\label{non-functional-requirements}
+
+\begin{itemize}
+\item \hl{\textbf{Fairness across varieties:} Every result is reported
+separately for Standard Bangla, Chittagonian and Sylheti, and the
+Standard-vs-dialect gap is a primary metric.}
+
+\item \hl{\textbf{No harm to Standard input:} Dialect handling must not
+reduce quality for Standard Bangla questions (tested by the
+NO\_NORMALIZATION and ALWAYS\_NORMALIZE ablations).}
+
+\item \hl{\textbf{Efficiency:} One 4-bit base model serves every domain;
+each additional domain costs one adapter of 133 MB instead of another
+large language model. End-to-end latency is about 0.57 s per question in
+batched evaluation on one GPU.}
+
+\item \hl{\textbf{Modularity:} The routers, normalization expert,
+retrievers, knowledge bases and domain adapters can each be replaced or
+retrained without retraining the others, so that new dialects or domains
+can be added later; one domain expert trains in 55--113 minutes.}
+
+\item \hl{\textbf{Reproducibility:} Fixed seeds (17; 42 and 101 for
+finalists), pinned software versions, configuration files, SHA-256
+manifests of every data transfer, and model selection on validation data
+only.}
+
+\item \hl{\textbf{Robustness of execution:} Every GPU job is resumable from
+checkpoints, so interruption of a cloud machine never loses finished
+work.}
+
+\item \hl{\textbf{Privacy:} No user data are stored; the knowledge bases are
+public resources and patient questions never leave the system (no
+external API).}
+\end{itemize}
+
+\subsection{Technical and Resource Requirements}\label{technical-and-resource-requirements}
+
+\begin{itemize}
+\item \hl{\textbf{Software:} Python 3.12, PyTorch 2.8.0 (CUDA 12.8), Hugging
+Face transformers 4.57.6 (and 5.17.0 in a separate environment for
+Gemma-4), PEFT 0.21.0, bitsandbytes 0.50.2, accelerate 1.15.0,
+scikit-learn 1.6.1 and sacreBLEU 2.5.1.}
+
+\item \hl{\textbf{Retrieval stack:} BM25 for sparse retrieval and BGE-M3 and
+multilingual-E5 embeddings for dense retrieval \cite{robertson2009bm25}, \cite{chen2024bgem3},
+\cite{wang2024me5}, with BanglaBERT as the transformer baseline for the routers
+\cite{bhattacharjee2022banglabert}.}
+
+\item \hl{\textbf{CPU compute:} Google Colab CPU runtimes (browser or VS
+Code) for data preparation, routers, sparse retrieval, analysis and
+report generation.}
+
+\item \hl{\textbf{GPU compute:} One NVIDIA A40 (48 GB, 44.4 GB usable)
+rented on RunPod for model comparison, expert training, dense retrieval
+and full-system evaluation. All language-model training uses 4-bit
+quantization and LoRA adapters so that it fits in a single GPU
+\cite{dettmers2023qlora}.}
+
+\item \hl{\textbf{Storage and transfer:} Google Drive for data and results,
+a private Hugging Face dataset repository for moving stage outputs
+between Colab and RunPod, and an 80 GB volume on the GPU machine.}
+
+\item \hl{\textbf{Human resources:} Native speakers of Chittagonian and
+Sylheti to verify dialect questions and a physician to review medical
+answers. Review sheets for both were prepared, but these reviews could
+not be completed within the project time (Section 5.11).}
+\end{itemize}
+
+\subsection{Final Design Specification}\label{final-design-specification}
+
+\hl{Table~\ref{tab:final-design} summarises the configuration that was finally selected.}
+
+\begin{longtable}{@{}p{0.270\textwidth}p{0.630\textwidth}@{}}
+\caption{Final specification of the selected design.}\label{tab:final-design}\\
+\toprule
+\textbf{Component} & \textbf{Selected configuration} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Component} & \textbf{Selected configuration} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Base language model & Gemma-4-E4B-it \cite{gemma4}, loaded once in 4-bit NF4 with double quantization \\
+Experts (Mixture-of-Adapters) & LoRA adapters \cite{hu2022lora} (r = 16, \ensuremath{\alpha} = 32, dropout 0.05, all attention and MLP projections; 34.9 M trainable parameters, 133 MB each): normalization (2 epochs, selected on validation data), education, general, medical; hard top-1 routing \\
+Dialect router & char (1--5) + word (1--2) TF-IDF, calibrated linear SVM; test macro-F1 0.946 \\
+Domain router & same features and classifier over education / general / medical / other; test macro-F1 0.908 \\
+Controller & gradient-boosted trees on router probabilities, retrieval scores and surface features; decisions ANSWER / CLARIFY / ABSTAIN \\
+Retrieval & education and general: BM25; medical: dense BGE-M3 \cite{chen2024bgem3}; 3 passages per question \\
+Knowledge bases & education 163,591 chunks, general 7,948, medical 28,134 \\
+Safety layer & rules for emergencies (fixed reply pointing to the national emergency number 999), dose/prescription refusal, referral note on every medical answer \\
+Output & Standard Bangla answer + trace (variety, normalized question, domain, decision, evidence) \\
+\bottomrule
+\end{longtable}
+
+\section{Societal Impact}\label{societal-impact}
+
+\hl{Chittagonian and Sylheti are spoken by millions of people in
+Bangladesh and the diaspora, yet question answering systems and language
+models are developed and evaluated predominantly on Standard Bangla. Our
+results quantify the consequence: without normalization the same
+questions score 33\% (Chittagonian) and 43\% (Sylheti) lower than in
+Standard Bangla (Section 5.6). The expected positive impacts are:}
+
+\begin{itemize}
+\item \hl{\textbf{Access to health information:} People can describe
+symptoms in their own variety and receive evidence-grounded general
+health information, with emergencies redirected to 999 and a doctor
+referral on every medical answer. This matters in a country where only
+about 11\% of doctors and nurses work in rural areas, home to about two
+thirds of the population \cite{nuruzzaman2022informing}.}
+
+\item \hl{\textbf{Education support:} Students can ask textbook questions
+(national curriculum) in their home variety and receive answers grounded
+in the same textbooks they study \cite{nctbqa}.}
+
+\item \hl{\textbf{Digital inclusion:} Speakers who write in romanized Bangla
+or in a regional variety are served by the same system, instead of being
+expected to switch to the standard written form.}
+
+\item \hl{\textbf{Research infrastructure:} The evaluation protocol (paired
+questions in three varieties, per-variety reporting, human-written
+dialect test questions) makes the dialect gap measurable and can be
+reused for other Bangla varieties, together with the trained routers,
+normalization adapter and evaluation scripts.}
+\end{itemize}
+
+\hl{The main societal risks are over-reliance on automatic health
+answers and wrong answers in dialects the system does not know well.
+They are mitigated by the informational-only design, abstention when
+evidence is missing, the referral note, and transparent reporting of
+failure cases. The system is a research prototype and is not intended
+for clinical use without further validation by physicians, regulatory
+review and ongoing monitoring.}
+
+\section{Ethical Issues}\label{ethical-issues}
+
+\begin{itemize}
+\item \hl{\textbf{Medical safety:} The medical branch is informational only
+and the system does not present itself as a doctor. Emergency
+descriptions bypass the language model and return a fixed message to
+call 999; dose or prescription requests are refused; every medical
+answer ends with a referral to a registered doctor. Advice that could
+delay urgent care is treated as the most serious type of error. No
+language model is used to judge safety; a physician review sheet was
+prepared for human validation.}
+
+\item \hl{\textbf{Data licensing and attribution:} Only public research
+datasets were used and each is cited. Several (e.g. BanglaRQA \cite{ekram2022banglarqa},
+released under CC BY-NC-SA 4.0, and BanglaCHQ-Summ \cite{khan2023banglachqsumm}) carry
+non-commercial licences, so the trained system is for research use. The
+dialect health dataset BanglaCHQ-Prantik \cite{prantik2025} was not used without
+the authors\textquotesingle{} permission.}
+
+\item \hl{\textbf{Privacy:} No personal data were collected. Knowledge-base
+texts come from published resources; the demonstration stores no
+conversations. Closed commercial models were deliberately not used, so
+that health questions never leave the system.}
+
+\item \hl{\textbf{Fairness and representativeness:} Performance is reported
+per variety, and the remaining dialect gap is stated explicitly rather
+than averaged away. Dialect data are imbalanced across varieties, and
+some sources, such as NCTB-QA, contain model-generated questions
+\cite{nctbqa}; these limitations are stated with the results.}
+
+\item \hl{\textbf{Respect for dialects:} Normalizing a dialect into Standard
+Bangla is a technical step to reuse existing resources. It does not
+imply that regional varieties are incorrect or inferior; answering in
+the user\textquotesingle s own dialect is listed as future work.}
+
+\item \hl{\textbf{Transparency and trust:} Every answer is returned with a
+trace (detected variety, normalized question, domain, decision and
+evidence), and the system abstains or asks for clarification when it is
+not sure.}
+
+\item \hl{\textbf{Honest reporting:} Negative and neutral findings are
+reported: the dialect-invariant encoder did not beat its base encoder,
+routed experts do not beat a single pooled adapter on accuracy, and the
+Chittagonian result remains below a published specialised model.}
+\end{itemize}
+
+\section{Standards}\label{standards}
+
+\hl{The work follows these standards and guidelines (alignment with
+their principles; no formal certification is claimed):}
+
+\begin{itemize}
+\item \hl{\textbf{Text encoding:} All text is stored in UTF-8 and normalized
+to Unicode Normalization Form C (Unicode Standard Annex \#15) with
+invisible characters removed, so that identical Bangla strings compare
+equal.}
+
+\item \hl{\textbf{Evaluation reporting:} Corpus BLEU and chrF++ are computed
+with sacreBLEU \cite{post2018sacrebleu}; confidence intervals and paired significance
+tests follow common NLP practice \cite{koehn2004bootstrap}, \cite{riezler2005randomization}; multiple
+comparisons are corrected with the Holm procedure \cite{holm1979}.}
+
+\item \hl{\textbf{Reproducibility and data management:} Fixed
+train/validation/test splits (official splits preserved), fixed random
+seeds, pinned package versions, versioned configuration files, a leakage
+audit, and SHA-256 checksums for every transferred file.}
+
+\item \hl{\textbf{Responsible AI for health:} The safety design follows
+widely accepted principles for AI in health information, including the
+World Health Organization\textquotesingle s guidance \cite{who2021ethics}: the
+system gives general information only, defers diagnosis and prescribing
+to qualified professionals, and escalates emergencies.}
+\end{itemize}
+
+\section{Project Management Plan}\label{project-management-plan}
+
+\hl{The project is organized into phases aligned with the thesis
+timeline. The plan prioritizes early data readiness and a working
+baseline pipeline, followed by component improvement and evaluation.}
+
+\begin{itemize}
+\item \hl{\textbf{Phase 1: Literature review and planning}}
+
+\hl{Finalize the scope, target dialects, domains and evaluation metrics,
+and confirm the availability and licenses of the datasets.}
+
+\item \hl{\textbf{Phase 2: Data collection and preprocessing}}
+
+\hl{Collect the dialect, QA and healthcare datasets, clean and normalize
+them, build the unified data schema, and construct the three knowledge
+bases (education, general knowledge and medical).}
+
+\item \hl{\textbf{Phase 3: Router and normalization expert}}
+
+\hl{Train and evaluate the variety and domain router, and train the
+dialect normalization adapter and compare it with zero-shot and
+few-shot prompting baselines.}
+
+\item \hl{\textbf{Phase 4: Domain RAG experts and base-model comparison}}
+
+\hl{Build and select the retriever of each domain (BM25 or dense), train
+the healthcare, education and general-knowledge adapters, and compare the
+candidate base models.}
+
+\item \hl{\textbf{Phase 5: Dialectal test set, evaluation and ablations}}
+
+\hl{Build the paired dialect test set, run the end-to-end and ablation
+experiments, and evaluate the system on dialect questions written by
+native speakers.}
+
+\item \hl{\textbf{Phase 6: Writing and finalization}}
+
+\hl{Consolidate the results, prepare the final figures and tables, and
+complete thesis formatting and proofreading.}
+\end{itemize}
+
+\hl{\textbf{Current status.} All six phases have been completed. The data
+stage cleaned and split more than twenty public sources into
+dialect--Standard pairs, QA items and three knowledge bases (education,
+general knowledge and medical), and an automatic leakage audit found no
+overlap between training, knowledge-base and test data. The variety and
+domain routers and the dialect normalization expert were trained and
+evaluated (dialect-router macro-F1 0.946; normalization chrF++ 76.3 for
+Chittagonian and 74.0 for Sylheti). Seven open base models were compared
+under one QLoRA budget, Gemma-4-E4B-it was selected, and the domain
+experts and retrievers were trained and chosen on validation data. The
+complete system was evaluated under nine conditions on 2,225 paired test
+questions and on 481 dialect questions written by native speakers, and
+the thesis is in its final writing stage.}
+
+\section{Risk Management}\label{risk-management}
+
+\hl{The project faced both technical and practical risks. The
+mitigations were planned in advance, and Table~\ref{tab:risks} also records what
+actually happened.}
+
+\begin{longtable}{@{}L{0.200\textwidth}L{0.360\textwidth}L{0.340\textwidth}@{}}
+\caption{Risks, mitigations and what actually happened.}\label{tab:risks}\\
+\toprule
+\textbf{Risk} & \textbf{Mitigation} & \textbf{Outcome} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Risk} & \textbf{Mitigation} & \textbf{Outcome} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Cloud GPU stopped or lost & resumable jobs with atomic checkpoints; results pushed to a private repository after every stage & pods were stopped and replaced several times without losing work \\
+Newest model not loadable by the stable software stack & separate environment with transformers 5 for Gemma-4 & Gemma-4 trained and evaluated normally \\
+Out-of-memory or silently truncated training data & 4096-token limit after a tokenizer-fertility audit; per-model count of dropped examples & 0 examples dropped in every expert \\
+Test data leaking into training or knowledge bases & group-wise splits and an automatic leakage audit & 0 leaks in all six audits \\
+Moving to a new cloud account & migration notebook comparing rows read per source before and after & identical data on the new account \\
+Native-speaker dialect test data unavailable & human-written question sentences of held-out corpus test splits & 481 human-written test questions evaluated \\
+Harmful medical output & rule-based safety layer, referral note, abstention & emergencies handled; remaining gaps reported (Section 5.9) \\
+Budget overrun & cost-aware schedule, CPU for all non-GPU work, deleting storage after use & total GPU cost about US\$20 \\
+Too little Chittagonian data, especially in the medical domain & combine all available dialect sources; one normalization adapter for both dialects with the variety named in the prompt & 16,030 Chittagonian training pairs; medical Chittagonian remains the scarcest \\
+Normalization changes the meaning of a question & confirmation rule for uncertain normalizations; comparison with base-model and prompting baselines & chrF++ 76.3 (Chittagonian) and 74.0 (Sylheti); the confirmation rule never fired, and some dialect words were kept literally \\
+Router confuses varieties that share features & calibrated router; every dialect label triggers normalization & macro-F1 0.946; 97.4\% / 94.3\% of human-written Chittagonian / Sylheti recognised, but only 71.5\% of synthetic Chittagonian \\
+Routed design does not outperform a single pipeline & pooled adapter with the same number of training steps as a control & equal accuracy (\ensuremath{\pm}0.005); the value of routing is modularity \\
+\bottomrule
+\end{longtable}
+
+\section{Economic Analysis}\label{economic-analysis}
+
+\hl{Development used free CPU notebooks and about 40 rented A40
+GPU-hours at US\$0.49 per hour, i.e. about US\$20 of GPU time plus a few
+dollars of storage, well within a student budget. Serving is also
+inexpensive: in batched evaluation the complete pipeline answered 2,225
+questions in 1,268 s on one A40 (about 0.57 s per question), i.e.
+roughly 6,300 questions per GPU-hour, or well under US\$0.001 per
+question at the same price. Because all domains share one quantized base
+model, adding a domain requires training one adapter (55--113 minutes in
+our runs) rather than hosting another model, and an existing domain can
+be updated without retraining the others (55 minutes for the medical
+expert versus 317 minutes for a single pooled adapter covering all
+tasks). Open models also avoid per-token API fees and keep health
+questions local. Further economic benefits are:}
+
+\begin{itemize}
+\item \hl{\textbf{Reuse instead of new data collection:} Normalizing
+dialectal questions lets the system reuse existing Standard Bangla
+textbooks, QA datasets and health content instead of building separate
+resources for every dialect.}
+
+\item \hl{\textbf{Potential savings for users:} Reliable first-line health
+information and curriculum-aligned learning support in a
+user\textquotesingle s own variety could reduce unnecessary travel,
+delayed care and reliance on paid private tutoring.}
+\end{itemize}

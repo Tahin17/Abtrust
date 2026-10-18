@@ -49,6 +49,12 @@ linear model is wrong. With no covariate information, the HC2 standard error equ
 error exactly (a unit test checks this). Plugging an ML prediction of $Y$ from pre-period features in as $X$
 gives CUPAC (Tang et al., 2020).
 
+The implementation scales centered covariates for numerical stability and solves the design using its
+pseudoinverse directly. It checks whether the treatment contrast is identifiable, uses rank-based residual
+degrees of freedom, and rejects saturated/unit-leverage designs for which HC2 uncertainty cannot be
+estimated. Redundant or constant covariates remain supported when the treatment contrast is identifiable.
+These checks are numerical/design safeguards, not finite-sample coverage guarantees.
+
 ## 5. Sequential analysis - `sequential_test`
 
 Naively checking a fixed-horizon p-value repeatedly inflates false positives. There are

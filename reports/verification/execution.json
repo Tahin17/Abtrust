@@ -1,0 +1,122 @@
+{
+  "started_at_utc": "2026-10-18T18:54:18+00:00",
+  "runtime": {
+    "python": "3.10.11",
+    "platform": "Windows",
+    "dependencies": {
+      "abtrust": "0.3.0",
+      "numpy": "2.2.6",
+      "scipy": "1.15.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.9",
+      "streamlit": "1.65.0"
+    },
+    "git": {
+      "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+      "dirty": true
+    },
+    "source_sha256": "d3353ae77531232c011c4ddd4babc14c0474946e73e67a38c35ad5f12b06c1e7"
+  },
+  "full_budget": true,
+  "streamlit_enabled": true,
+  "checks": [
+    {
+      "command": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        ".",
+        "--no-cache"
+      ],
+      "started_at_utc": "2026-10-18T18:54:19+00:00",
+      "finished_at_utc": "2026-10-18T18:54:19+00:00",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "started_at_utc": "2026-10-18T18:54:19+00:00",
+      "finished_at_utc": "2026-10-18T18:54:52+00:00",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "abtrust.cli",
+        "--version"
+      ],
+      "started_at_utc": "2026-10-18T18:54:52+00:00",
+      "finished_at_utc": "2026-10-18T18:54:54+00:00",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "abtrust.cli",
+        "plan",
+        "--baseline",
+        "0.10",
+        "--mde",
+        "0.05",
+        "--relative",
+        "--daily",
+        "20000"
+      ],
+      "started_at_utc": "2026-10-18T18:54:54+00:00",
+      "finished_at_utc": "2026-10-18T18:54:56+00:00",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "abtrust.cli",
+        "validate"
+      ],
+      "started_at_utc": "2026-10-18T18:54:56+00:00",
+      "finished_at_utc": "2026-10-18T18:59:53+00:00",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "abtrust.cli",
+        "stress"
+      ],
+      "started_at_utc": "2026-10-18T18:59:53+00:00",
+      "finished_at_utc": "2026-10-18T19:00:36+00:00",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "scripts/case_study.py"
+      ],
+      "started_at_utc": "2026-10-18T19:00:36+00:00",
+      "finished_at_utc": "2026-10-18T19:00:51+00:00",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "scripts/hillstrom.py",
+        "--csv",
+        "data/hillstrom.csv"
+      ],
+      "started_at_utc": "2026-10-18T19:00:51+00:00",
+      "finished_at_utc": "2026-10-18T19:00:54+00:00",
+      "exit_code": 0
+    }
+  ],
+  "finished_at_utc": "2026-10-18T19:00:54+00:00",
+  "real_data_run": true,
+  "all_checks_passed": true
+}

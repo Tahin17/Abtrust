@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "analyzed_at_utc": "2026-10-18T19:00:50+00:00",
+  "data_kind": "simulation",
+  "settings": {
+    "generator": "ecommerce_experiment",
+    "n_users": 200000,
+    "seed": 2026,
+    "lift": 0.04,
+    "legacy_logging_loss": 0.6,
+    "n_null_metrics": 12,
+    "sample_size": 40000,
+    "sample_seed": 7,
+    "alpha": 0.05,
+    "correction": "holm",
+    "monitoring_fractions": [
+      0.07142857142857142,
+      0.14285714285714285,
+      0.21428571428571427,
+      0.2857142857142857,
+      0.35714285714285715,
+      0.42857142857142855,
+      0.5,
+      0.5714285714285714,
+      0.6428571428571429,
+      0.7142857142857143,
+      0.7857142857142857,
+      0.8571428571428571,
+      0.9285714285714286,
+      1.0
+    ],
+    "sequential_mode": "working_normal",
+    "tau": 0.005265312347081849,
+    "guardrail_harm_margins": null,
+    "populations": [
+      "all_users",
+      "excluding_android_legacy"
+    ]
+  },
+  "runtime": {
+    "python": "3.10.11",
+    "platform": "Windows",
+    "dependencies": {
+      "abtrust": "0.3.0",
+      "numpy": "2.2.6",
+      "scipy": "1.15.3",
+      "pandas": "2.3.3",
+      "matplotlib": "3.10.9",
+      "streamlit": "1.65.0"
+    },
+    "git": {
+      "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+      "dirty": true
+    },
+    "source_sha256": "7df4f02e3f9a7e4aca693945196d9a9ec8f9e44d1c72d4ecd6844db6139f5992"
+  }
+}

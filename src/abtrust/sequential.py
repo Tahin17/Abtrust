@@ -27,6 +27,22 @@ import numpy as np
 from numpy.typing import ArrayLike
 from scipy import optimize, stats
 
+from ._inputs import finite_scalar, positive_integer, positive_scalar
+
+
+def _alpha(alpha: float) -> float:
+    alpha = finite_scalar(alpha, "alpha")
+    if not 0 < alpha < 1:
+        raise ValueError("alpha must be in (0, 1)")
+    return alpha
+
+
+def _standard_errors(se: ArrayLike) -> np.ndarray:
+    values = np.asarray(se, dtype=float)
+    if not np.all(np.isfinite(values)) or np.any(values < 0):
+        raise ValueError("standard errors must be finite and nonnegative")
+    return values
+
 __all__ = [
     "Look",
     "SequentialResult",
@@ -43,10 +59,12 @@ def mixture_log_lr(effect: ArrayLike, se: ArrayLike, tau: float, theta0: float =
 
     Vectorised over ``effect`` and ``se``.
     """
-    if tau <= 0:
-        raise ValueError("tau must be positive")
+    tau = positive_scalar(tau, "tau")
+    theta0 = finite_scalar(theta0, "theta0")
     d = np.asarray(effect, dtype=float) - theta0
-    s2 = np.asarray(se, dtype=float) ** 2
+    if not np.all(np.isfinite(d)):
+        raise ValueError("effects must be finite")
+    s2 = _standard_errors(se) ** 2
     t2 = tau**2
     with np.errstate(divide="ignore", invalid="ignore"):
         out = 0.5 * np.log(s2 / (s2 + t2)) + t2 * d**2 / (2.0 * s2 * (s2 + t2))
@@ -55,9 +73,9 @@ def mixture_log_lr(effect: ArrayLike, se: ArrayLike, tau: float, theta0: float =
 
 def always_valid_halfwidth(se: ArrayLike, tau: float, alpha: float = 0.05) -> np.ndarray:
     """Half-width of the (1 - alpha) normal-mixture confidence sequence."""
-    if tau <= 0:
-        raise ValueError("tau must be positive")
-    s2 = np.asarray(se, dtype=float) ** 2
+    tau = positive_scalar(tau, "tau")
+    alpha = _alpha(alpha)
+    s2 = _standard_errors(se) ** 2
     t2 = tau**2
     with np.errstate(divide="ignore", invalid="ignore"):
         hw = np.sqrt(s2 * (s2 + t2) / t2 * np.log((s2 + t2) / (s2 * alpha**2)))
@@ -82,8 +100,8 @@ def tau_for_horizon(se_at_horizon: float, alpha: float = 0.05) -> float:
     ``se_at_horizon`` is the standard error of the difference in means you expect
     at the planned final sample size (e.g. from historical data).
     """
-    if se_at_horizon <= 0:
-        raise ValueError("se_at_horizon must be positive")
+    se_at_horizon = positive_scalar(se_at_horizon, "se_at_horizon")
+    alpha = _alpha(alpha)
     return float(np.sqrt(_optimal_ratio(alpha)) * se_at_horizon)
 
 
@@ -91,7 +109,10 @@ def tau_from_design(
     sd: float, n_per_arm: int, alpha: float = 0.05, sd_treatment: float | None = None, ratio: float = 1.0
 ) -> float:
     """Convenience wrapper: ``tau`` from the metric's standard deviation and planned size."""
-    sd_t = sd if sd_treatment is None else sd_treatment
+    sd = positive_scalar(sd, "sd")
+    n_per_arm = positive_integer(n_per_arm, "n_per_arm", minimum=2)
+    ratio = positive_scalar(ratio, "ratio")
+    sd_t = sd if sd_treatment is None else positive_scalar(sd_treatment, "sd_treatment")
     se = np.sqrt(sd**2 / n_per_arm + sd_t**2 / (ratio * n_per_arm))
     return tau_for_horizon(float(se), alpha)
 
@@ -162,13 +183,16 @@ class SequentialResult:
 
 
 def _look_counts(n: int, looks: int | Sequence[float]) -> np.ndarray:
+    if isinstance(looks, (bool, np.bool_)):
+        raise ValueError("looks must be a positive integer or increasing fractions")
     if isinstance(looks, (int, np.integer)):
         if looks < 1:
             raise ValueError("looks must be >= 1")
         fractions = np.arange(1, looks + 1) / looks
     else:
         fractions = np.asarray(looks, dtype=float)
-        if fractions.ndim != 1 or np.any((fractions <= 0) | (fractions > 1)) or np.any(np.diff(fractions) <= 0):
+        if (fractions.ndim != 1 or not fractions.size or not np.all(np.isfinite(fractions))
+                or np.any((fractions <= 0) | (fractions > 1)) or np.any(np.diff(fractions) <= 0)):
             raise ValueError("looks must be increasing fractions in (0, 1]")
     return np.floor(fractions * n).astype(int)
 
@@ -213,10 +237,13 @@ def sequential_test(
         raise ValueError("each arm needs at least 2 observations")
     if not (np.all(np.isfinite(c)) and np.all(np.isfinite(t))):
         raise ValueError("outcomes contain NaN or infinite values")
-    if not 0 < alpha < 1:
-        raise ValueError("alpha must be in (0, 1)")
+    alpha = _alpha(alpha)
     if mode not in {"working_normal", "bounded", "gaussian_known_sd"}:
         raise ValueError("mode must be working_normal, bounded, or gaussian_known_sd")
+    if tau is not None:
+        tau = positive_scalar(tau, "tau")
+    if known_sd is not None and mode == "working_normal":
+        raise ValueError("known_sd is only used in gaussian_known_sd mode")
     if mode == "gaussian_known_sd" and c.size != t.size:
         raise ValueError("gaussian_known_sd currently requires paired equal arm sizes at all looks")
     if mode == "bounded":

@@ -11,9 +11,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .validation import STUDIES, StudyResult
+from .provenance import file_sha256, runtime_provenance, utc_now
+from .validation import StudyResult
 
-__all__ = ["md_table", "write_validation_report", "load_validation_results"]
+__all__ = ["md_table", "write_validation_report", "load_validation_results", "render_validation_report"]
 
 
 def md_table(df: pd.DataFrame, formats: Mapping[str, str] | None = None) -> str:
@@ -145,6 +146,10 @@ def _section(name: str, r: StudyResult) -> list[str]:
     elif name == "power_calibration":
         view = t[["design", "method", "n_per_arm", "planned_power", "empirical_power", "mcse", "n_sims"]]
         lines += [md_table(view, {"planned_power": ".0%", "empirical_power": ".1%", "mcse": ".1%"})]
+    else:
+        lines += [md_table(t), "", "Results are synthetic diagnostics under the assumptions recorded in the manifest. "
+                  "The INVALID selection scenario intentionally violates the analysis assumptions; constant outcomes "
+                  "are a deterministic fixture, not a guarantee for rare-event inference."]
     lo, hi = int(t.n_sims.min()), int(t.n_sims.max())
     budget = f"{hi:,} simulated experiments per cell" if lo == hi else (
         f"{lo:,}–{hi:,} simulated experiments per cell; exact counts shown in n_sims"
@@ -158,21 +163,31 @@ def write_validation_report(
 ) -> Path:
     """Write ``validation.md``, one CSV per study and (optionally) PNG figures."""
     out = Path(out_dir)
+    if not results:
+        raise ValueError("cannot write an empty validation run")
     data_dir = out / "validation"
     data_dir.mkdir(parents=True, exist_ok=True)
     for name, r in results.items():
         r.table.to_csv(data_dir / f"{name}.csv", index=False)
     meta = {
+        "schema_version": 2,
         "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M"),
         "python": platform.python_version(),
         "numpy": np.__version__,
         "pandas": pd.__version__,
         "studies": {
-            n: {"question": r.question, "headline": r.headline, "seconds": round(r.seconds, 1)}
+            n: {"question": r.question, "headline": r.headline, "seconds": round(r.seconds, 1),
+                "metadata": r.metadata, "csv_sha256": file_sha256(data_dir / f"{n}.csv")}
             for n, r in results.items()
         },
     }
     (data_dir / "summary.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
+
+    return _render_validation_report(results, out, meta, figures)
+
+
+def _render_validation_report(results: Mapping[str, StudyResult], out: Path, meta: dict, figures: bool) -> Path:
+    supplemental = all(name.startswith("stress_") for name in results)
 
     if figures:
         from . import plots
@@ -188,7 +203,7 @@ def write_validation_report(
             plots.srm_figure(results["srm"].table, figdir / "srm.png")
 
     lines = [
-        "# Validation report",
+        "# Supplemental stress validation (synthetic)" if supplemental else "# Validation report",
         "",
         "This report measures selected methods empirically under the listed simulations. Simulations cannot prove "
         "a general statistical guarantee. In particular the original mSPRT inserts estimated variances into "
@@ -196,8 +211,10 @@ def write_validation_report(
         "not an exact anytime-valid test. For exact assumptions see docs/methods.md. Columns ending in `mcse` "
         "are Monte Carlo standard errors of simulated rates.",
         "",
-        f"Generated {meta['generated_utc']} UTC with Python {meta['python']}, numpy {meta['numpy']}. "
-        "Reproduce with `abtrust validate` (add `--scale 0.1` for a quick run).",
+        f"Simulation results saved {meta['generated_utc']} UTC with Python {meta['python']}, numpy {meta['numpy']}. "
+        + (f"Reproduce with `abtrust stress --simulations {max(int(r.table.n_sims.max()) for r in results.values())}`. "
+           "These are supplemental studies, separate from the seven core studies."
+           if supplemental else "Reproduce the full core suite with `abtrust validate`; use a separate `--out` directory for reduced-budget runs."),
         "",
         "## Summary",
         "",
@@ -208,6 +225,9 @@ def write_validation_report(
         lines += _section(name, r)
     path = out / "validation.md"
     path.write_text("\n".join(lines), encoding="utf-8")
+    rendering = {"rendered_at_utc": utc_now(), "runtime": runtime_provenance(),
+                 "simulation_manifest_sha256": file_sha256(out / "validation" / "summary.json")}
+    (out / "validation" / "rendering.json").write_text(json.dumps(rendering, indent=2), encoding="utf-8")
     return path
 
 
@@ -216,11 +236,28 @@ def load_validation_results(out_dir: str | Path = "reports") -> dict[str, StudyR
     data_dir = Path(out_dir) / "validation"
     meta = json.loads((data_dir / "summary.json").read_text(encoding="utf-8"))["studies"]
     res = {}
-    for name in STUDIES:
+    for name in meta:
+        if Path(name).name != name or not name.replace("_", "").isalnum():
+            raise ValueError(f"invalid saved study name {name!r}")
         f = data_dir / f"{name}.csv"
         if f.exists():
             m = meta.get(name, {})
+            if m.get("csv_sha256") and file_sha256(f) != m["csv_sha256"]:
+                raise ValueError(f"saved results checksum mismatch: {f.name}; investigate before rendering")
             res[name] = StudyResult(
-                name, m.get("question", ""), pd.read_csv(f), m.get("headline", ""), m.get("seconds", 0.0)
+                name, m.get("question", ""), pd.read_csv(f, float_precision="round_trip"),
+                m.get("headline", ""), m.get("seconds", 0.0), m.get("metadata", {})
             )
+        else:
+            raise ValueError(f"saved results missing: {f.name}")
     return res
+
+
+def render_validation_report(out_dir: str | Path = "reports", figures: bool = True) -> Path:
+    """Rebuild presentation only; preserve the CSV bytes and simulation manifest."""
+    out = Path(out_dir)
+    results = load_validation_results(out)
+    if not results:
+        raise ValueError("no saved studies to render")
+    meta = json.loads((out / "validation" / "summary.json").read_text(encoding="utf-8"))
+    return _render_validation_report(results, out, meta, figures)

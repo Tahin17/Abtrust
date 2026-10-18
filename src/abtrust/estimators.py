@@ -305,6 +305,8 @@ def lin_adjustment(
     X = np.asarray(covariates, dtype=float)
     if X.ndim == 1:
         X = X[:, None]
+    if X.ndim != 2:
+        raise ValueError("covariates must be a vector or a two-dimensional matrix")
     if X.shape[0] != yv.size or tv.size != yv.size:
         raise ValueError("y, treatment and covariates must have the same number of rows")
     if not np.all(np.isfinite(X)):
@@ -315,13 +317,27 @@ def lin_adjustment(
         raise ValueError("each arm needs at least 2 observations")
 
     Xc = X - X.mean(axis=0)
+    # Scaling leaves fitted values and the treatment contrast unchanged, while
+    # preventing differently measured covariates from overwhelming rank checks.
+    scale = Xc.std(axis=0)
+    Xc = Xc / np.where(scale > 0, scale, 1.0)
     design = np.column_stack([np.ones_like(yv), tv, Xc, Xc * tv[:, None]])
-    n, p = design.shape
-    xtx_inv = np.linalg.pinv(design.T @ design)
-    beta = xtx_inv @ design.T @ yv
+    n = design.shape[0]
+    rank = int(np.linalg.matrix_rank(design))
+    inverse = np.linalg.pinv(design)
+    contrast = np.zeros(design.shape[1])
+    contrast[1] = 1.0
+    if not np.allclose((inverse @ design) @ contrast, contrast, atol=1e-8, rtol=1e-8):
+        raise ValueError("treatment effect is not identifiable from the regression design")
+    if n <= rank:
+        raise ValueError("regression needs positive residual degrees of freedom")
+    xtx_inv = inverse @ inverse.T
+    beta = inverse @ yv
     resid = yv - design @ beta
-    leverage = np.einsum("ij,jk,ik->i", design, xtx_inv, design)
-    omega = resid**2 / np.clip(1.0 - leverage, 1e-12, None)
+    leverage = np.einsum("ij,ji->i", design, inverse)
+    if np.any(leverage >= 1.0 - 1e-10):
+        raise ValueError("regression has unit leverage; HC2 uncertainty cannot be estimated")
+    omega = resid**2 / (1.0 - leverage)
     meat = (design * omega[:, None]).T @ design
     vcov = xtx_inv @ meat @ xtx_inv  # HC2 sandwich
 
@@ -342,6 +358,7 @@ def lin_adjustment(
         effect=b1,
         se=float(np.sqrt(v11)),
         alpha=alpha,
-        df=float(n - p),
-        extras={"n_covariates": X.shape[1], "r_squared": float(1.0 - resid.var() / yv.var()) if yv.var() > 0 else 0.0},
+        df=float(n - rank),
+        extras={"n_covariates": X.shape[1], "design_rank": rank, "df": n - rank,
+                "r_squared": float(1.0 - resid.var() / yv.var()) if yv.var() > 0 else 0.0},
     )

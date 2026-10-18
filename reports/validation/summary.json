@@ -1,5 +1,6 @@
 {
-  "generated_utc": "2026-10-18 16:56",
+  "schema_version": 2,
+  "generated_utc": "2026-10-18 18:59",
   "python": "3.10.11",
   "numpy": "2.2.6",
   "pandas": "2.3.3",
@@ -7,37 +8,356 @@
     "type1_coverage": {
       "question": "Does the Welch test hold its 5% error rate and 95% coverage, even on heavy-tailed revenue?",
       "headline": "Welch false-positive rate 3.9%-5.1% and 95% CI coverage 94.4%-95.9% across metrics and sizes.",
-      "seconds": 18.4
+      "seconds": 15.0,
+      "metadata": {
+        "simulated_at_utc": "2026-10-18T18:54:59+00:00",
+        "runtime": {
+          "python": "3.10.11",
+          "platform": "Windows",
+          "dependencies": {
+            "abtrust": "0.3.0",
+            "numpy": "2.2.6",
+            "scipy": "1.15.3",
+            "pandas": "2.3.3",
+            "matplotlib": "3.10.9",
+            "streamlit": "1.65.0"
+          },
+          "git": {
+            "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+            "dirty": true
+          },
+          "source_sha256": "d3353ae77531232c011c4ddd4babc14c0474946e73e67a38c35ad5f12b06c1e7"
+        },
+        "scale": 1.0,
+        "parameters": {
+          "n_sims": 4000,
+          "seed": 1
+        },
+        "alpha": 0.05,
+        "implementation_sha256": "987062949ed7aa7fce6434e97eda9db59ad327297604953f65325b4bb921b976",
+        "scenario_configuration": {
+          "conversion_rate": 0.05,
+          "revenue": {
+            "p_purchase": 0.08,
+            "mu": 3.5,
+            "sigma": 1.2
+          },
+          "relative_effect": 0.05,
+          "n_per_arm": [
+            500,
+            2000,
+            10000
+          ],
+          "alpha": 0.05
+        }
+      },
+      "csv_sha256": "83af5fb1785e4a1b6efb17cb3d261c1c594a7596b427f40aa75a1e90e0c64bcd"
     },
     "peeking": {
       "question": "How does naive peeking compare with a working-normal mSPRT approximation?",
       "headline": "Peeking 100 times inflates false positives to 38.1%; working-normal mSPRT has 1.6% empirically (not a formal guarantee).",
-      "seconds": 90.8
+      "seconds": 97.8,
+      "metadata": {
+        "simulated_at_utc": "2026-10-18T18:55:14+00:00",
+        "runtime": {
+          "python": "3.10.11",
+          "platform": "Windows",
+          "dependencies": {
+            "abtrust": "0.3.0",
+            "numpy": "2.2.6",
+            "scipy": "1.15.3",
+            "pandas": "2.3.3",
+            "matplotlib": "3.10.9",
+            "streamlit": "1.65.0"
+          },
+          "git": {
+            "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+            "dirty": true
+          },
+          "source_sha256": "d3353ae77531232c011c4ddd4babc14c0474946e73e67a38c35ad5f12b06c1e7"
+        },
+        "scale": 1.0,
+        "parameters": {
+          "n_sims": 3000,
+          "seed": 2,
+          "n_max": 10000,
+          "base_rate": 0.1
+        },
+        "alpha": 0.05,
+        "implementation_sha256": "77e8a33ca0ff78d16e2b2a088cdc4643171d3992c9ac1f1cacda0dfcdc1f3990",
+        "scenario_configuration": {
+          "n_per_arm": 10000,
+          "baseline": 0.1,
+          "mde": 0.011886119434798038,
+          "looks": [
+            1,
+            2,
+            5,
+            10,
+            20,
+            50,
+            100
+          ],
+          "tau": 0.01215793428935684,
+          "alpha": 0.05,
+          "effect_multipliers": [
+            0,
+            1,
+            2
+          ],
+          "modes": [
+            "working_normal",
+            "bounded"
+          ]
+        }
+      },
+      "csv_sha256": "8b8d8421fc7c1e953cdf79e2c0b87b1992721e34fdba39fa95c8d4c5956183f5"
     },
     "cuped": {
       "question": "Does CUPED reduce variance as much as theory says, without inflating false positives?",
       "headline": "At rho=0.7 CUPED shrinks the SE to 0.73x (theory 0.71x) and lifts power from 50% to 79% with false-positive rate 5.3%.",
-      "seconds": 55.5
+      "seconds": 58.3,
+      "metadata": {
+        "simulated_at_utc": "2026-10-18T18:56:51+00:00",
+        "runtime": {
+          "python": "3.10.11",
+          "platform": "Windows",
+          "dependencies": {
+            "abtrust": "0.3.0",
+            "numpy": "2.2.6",
+            "scipy": "1.15.3",
+            "pandas": "2.3.3",
+            "matplotlib": "3.10.9",
+            "streamlit": "1.65.0"
+          },
+          "git": {
+            "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+            "dirty": true
+          },
+          "source_sha256": "d3353ae77531232c011c4ddd4babc14c0474946e73e67a38c35ad5f12b06c1e7"
+        },
+        "scale": 1.0,
+        "parameters": {
+          "n_sims": 3000,
+          "seed": 3,
+          "n": 1000
+        },
+        "alpha": 0.05,
+        "implementation_sha256": "7348fd2382fd6b22770764770d872439c4d4133504fa55d6d23fa48bc20207fa",
+        "scenario_configuration": {
+          "n_per_arm": 1000,
+          "effect": 0.08944271909999159,
+          "mean": 10.0,
+          "sd": 1.0,
+          "rho": [
+            0.0,
+            0.3,
+            0.5,
+            0.7,
+            0.9
+          ],
+          "alpha": 0.05
+        }
+      },
+      "csv_sha256": "363c56d5aa27016baddf7f81ef2a819f23bf1053559bfbf4140ef7f31b5384eb"
     },
     "ratio_metrics": {
       "question": "What happens if a ratio metric is analysed per event instead of per user?",
       "headline": "At ICC=0.10, per-session analysis has a 14.5% false-positive rate; the delta method has 5.1%.",
-      "seconds": 45.6
+      "seconds": 44.3,
+      "metadata": {
+        "simulated_at_utc": "2026-10-18T18:57:50+00:00",
+        "runtime": {
+          "python": "3.10.11",
+          "platform": "Windows",
+          "dependencies": {
+            "abtrust": "0.3.0",
+            "numpy": "2.2.6",
+            "scipy": "1.15.3",
+            "pandas": "2.3.3",
+            "matplotlib": "3.10.9",
+            "streamlit": "1.65.0"
+          },
+          "git": {
+            "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+            "dirty": true
+          },
+          "source_sha256": "d3353ae77531232c011c4ddd4babc14c0474946e73e67a38c35ad5f12b06c1e7"
+        },
+        "scale": 1.0,
+        "parameters": {
+          "n_sims": 3000,
+          "seed": 4,
+          "n_users": 2000
+        },
+        "alpha": 0.05,
+        "implementation_sha256": "3373216df377dd6959f8cd408ce335df4bc66590b979f97f40853d0c2a704469",
+        "scenario_configuration": {
+          "n_users": 2000,
+          "ctr": 0.1,
+          "relative_effect": 0.05,
+          "mean_sessions": 6.0,
+          "icc": [
+            0.0,
+            0.02,
+            0.05,
+            0.1,
+            0.2
+          ],
+          "alpha": 0.05
+        }
+      },
+      "csv_sha256": "7084ac774f3c866ae975a420a3fbe5beb8c5daedc0d0d0e24d6d282fb895d66f"
     },
     "srm": {
       "question": "How sensitive is the SRM check, and how often does it false-alarm?",
       "headline": "SRM check false-alarm rate 0.10% at threshold 0.001; detects a 50.5/49.5 split at n=100k 45% of the time.",
-      "seconds": 9.3
+      "seconds": 9.1,
+      "metadata": {
+        "simulated_at_utc": "2026-10-18T18:58:34+00:00",
+        "runtime": {
+          "python": "3.10.11",
+          "platform": "Windows",
+          "dependencies": {
+            "abtrust": "0.3.0",
+            "numpy": "2.2.6",
+            "scipy": "1.15.3",
+            "pandas": "2.3.3",
+            "matplotlib": "3.10.9",
+            "streamlit": "1.65.0"
+          },
+          "git": {
+            "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+            "dirty": true
+          },
+          "source_sha256": "d3353ae77531232c011c4ddd4babc14c0474946e73e67a38c35ad5f12b06c1e7"
+        },
+        "scale": 1.0,
+        "parameters": {
+          "n_sims": 2000,
+          "seed": 5
+        },
+        "alpha": 0.05,
+        "implementation_sha256": "f10b7f71038f65418ae404783981eecf45818cf412ca776ea67f8629ad04beff",
+        "scenario_configuration": {
+          "n_total": [
+            10000,
+            100000,
+            1000000
+          ],
+          "expected_split": [
+            0.5,
+            0.5
+          ],
+          "treatment_share": [
+            0.5,
+            0.501,
+            0.5025,
+            0.505,
+            0.51
+          ],
+          "threshold": 0.001
+        }
+      },
+      "csv_sha256": "0a1a102562b06fe0a81a0dec50a3dd28f84ba5313d1932d65a6673fa614d3611"
     },
     "power_calibration": {
       "question": "Do 80%-power designs actually deliver 80% power?",
       "headline": "Planned 80% power -> empirical 79.4%, 80.2%, 79.8%.",
-      "seconds": 3.3
+      "seconds": 3.3,
+      "metadata": {
+        "simulated_at_utc": "2026-10-18T18:58:43+00:00",
+        "runtime": {
+          "python": "3.10.11",
+          "platform": "Windows",
+          "dependencies": {
+            "abtrust": "0.3.0",
+            "numpy": "2.2.6",
+            "scipy": "1.15.3",
+            "pandas": "2.3.3",
+            "matplotlib": "3.10.9",
+            "streamlit": "1.65.0"
+          },
+          "git": {
+            "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+            "dirty": true
+          },
+          "source_sha256": "d3353ae77531232c011c4ddd4babc14c0474946e73e67a38c35ad5f12b06c1e7"
+        },
+        "scale": 1.0,
+        "parameters": {
+          "n_sims": 2000,
+          "seed": 6
+        },
+        "alpha": 0.05,
+        "implementation_sha256": "ae539596c062980f6f4ba9984dd73e035b1b123cf027db1f262302edbd6ed2a3",
+        "scenario_configuration": {
+          "target_power": 0.8,
+          "conversion": {
+            "baseline": 0.1,
+            "relative_effect": 0.1
+          },
+          "revenue": {
+            "p_purchase": 0.08,
+            "mu": 3.5,
+            "sigma": 1.2,
+            "relative_effect": 0.2
+          },
+          "cuped": {
+            "rho": 0.6,
+            "effect": 0.1,
+            "sd": 1.0
+          },
+          "alpha": 0.05
+        }
+      },
+      "csv_sha256": "776476dbdd67d574af3b53047c075c02e9fe29260454a553d67e539e6ab0149e"
     },
     "multiple_testing": {
       "question": "How often does a many-metric readout produce a false win?",
       "headline": "With 14 null metrics, P(at least one false win) is 52% uncorrected, 5.7% with Holm, 5.8% with Benjamini-Hochberg.",
-      "seconds": 64.8
+      "seconds": 63.9,
+      "metadata": {
+        "simulated_at_utc": "2026-10-18T18:58:46+00:00",
+        "runtime": {
+          "python": "3.10.11",
+          "platform": "Windows",
+          "dependencies": {
+            "abtrust": "0.3.0",
+            "numpy": "2.2.6",
+            "scipy": "1.15.3",
+            "pandas": "2.3.3",
+            "matplotlib": "3.10.9",
+            "streamlit": "1.65.0"
+          },
+          "git": {
+            "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+            "dirty": true
+          },
+          "source_sha256": "d3353ae77531232c011c4ddd4babc14c0474946e73e67a38c35ad5f12b06c1e7"
+        },
+        "scale": 1.0,
+        "parameters": {
+          "n_sims": 2000,
+          "seed": 7,
+          "n": 2000
+        },
+        "alpha": 0.05,
+        "implementation_sha256": "4232bc3fc2e1f3d7256ddb24b61425e0e96be65af0623f5c68102b5f753c9ad8",
+        "scenario_configuration": {
+          "n_per_arm": 2000,
+          "effect": 0.09486832980505137,
+          "metrics": [
+            1,
+            5,
+            14,
+            50
+          ],
+          "real_metric_count": "max(metrics // 5, 1) in the alternative scenario",
+          "alpha": 0.05
+        }
+      },
+      "csv_sha256": "864967afc191d215e39dbebcefdcbf4f0277093d939156aa2fa7f724cf964d2f"
     }
   }
 }

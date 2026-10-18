@@ -1,0 +1,104 @@
+{
+  "verified_at_utc": "2026-10-18T19:26:42+00:00",
+  "artifacts": {
+    "abtrust-0.3.0.tar.gz": {
+      "sha256": "c35d372913b2075454d59d3bc74499da5136fc099dbf09b408f6befc44102a30",
+      "bytes": 1051401
+    },
+    "abtrust-0.3.0-py3-none-any.whl": {
+      "sha256": "3c27090f46e1c38c0d903d31dc55e9bcc61658ddd6aa128640cfbb63d53600ee",
+      "bytes": 59867
+    }
+  },
+  "source_archive": {
+    "required_content_present": [
+      "app/streamlit_app.py",
+      "scripts/verify.py",
+      "scripts/dashboard_fixtures.py",
+      "docs/RELEASE_VERIFICATION.md",
+      "docs/REPRODUCIBILITY.md",
+      "docs/LEARNING_AND_DEMO.md",
+      "data/sample_experiment.csv",
+      "tests/test_input_hardening.py",
+      "src/abtrust/sequential.py",
+      ".gitattributes"
+    ],
+    "excluded_cached_real_data_environments_and_scratch": true,
+    "distribution_record_excluded_to_avoid_self_referential_hash": true
+  },
+  "wheel": {
+    "core_library_and_cli_present": true,
+    "SPDX_license": "MIT",
+    "python_requirement": ">=3.10"
+  },
+  "wheel_smoke": {
+    "outside_repository": true,
+    "environment": "separate core-only wheel install",
+    "checks": [
+      {
+        "command": [
+          "python",
+          "-c",
+          "import abtrust; from abtrust.sequential import sequential_test; print(abtrust.__file__); r=sequential_test([0,1]*20,[1,0]*20,mode=\"bounded\",looks=5); print(r.mode)"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "python",
+          "-m",
+          "abtrust.cli",
+          "--version"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "python",
+          "-m",
+          "abtrust.cli",
+          "plan",
+          "--baseline",
+          "0.10",
+          "--mde",
+          "0.05",
+          "--relative",
+          "--daily",
+          "20000"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "python",
+          "-m",
+          "abtrust.cli",
+          "validate",
+          "--only",
+          "srm",
+          "--scale",
+          "0.01",
+          "--out",
+          "results",
+          "--no-figures"
+        ],
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "python",
+          "-m",
+          "abtrust.cli",
+          "render",
+          "--out",
+          "results",
+          "--no-figures"
+        ],
+        "exit_code": 0
+      }
+    ],
+    "all_passed": true
+  },
+  "git_result_bytes_preserved": true,
+  "published": false
+}

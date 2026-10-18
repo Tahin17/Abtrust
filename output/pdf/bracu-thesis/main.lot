@@ -1,0 +1,19 @@
+\babel@toc {english}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces Summary of the most closely related studies and the gap each leaves for this thesis.\relax }}{17}{table.2.1}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Functional requirements, implementing components and verifying experiments.\relax }}{22}{table.3.1}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Final specification of the selected design.\relax }}{25}{table.3.2}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Risks, mitigations and what actually happened.\relax }}{28}{table.3.3}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Research questions and the experiments (stages) that answer them.\relax }}{32}{table.caption.16}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Dialect words and their Standard Bangla forms (transliterated; from the TRAIN split of the word-level glossary, Section~\ref {sec:v2}).\relax }}{33}{table.caption.17}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Data sources, rows used, and role (``rows used'' are counted before cross-source de-duplication; Fig.~\ref {fig:sources} shows the unique pairs).\relax }}{38}{table.caption.24}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Leak-free split sizes.\relax }}{40}{table.caption.30}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Knowledge bases (searched, never trained on).\relax }}{41}{table.caption.31}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces Candidate base models.\relax }}{41}{table.caption.32}%
+\contentsline {table}{\numberline {4.7}{\ignorespaces Adapters trained on Gemma-4-E4B-it (QLoRA unless stated).\relax }}{44}{table.caption.36}%
+\contentsline {table}{\numberline {4.8}{\ignorespaces Shared training and decoding settings.\relax }}{45}{table.caption.37}%
+\contentsline {table}{\numberline {4.9}{\ignorespaces End-to-end evaluation conditions.\relax }}{47}{table.caption.39}%
+\contentsline {table}{\numberline {4.10}{\ignorespaces Answer-time improvements (no retraining), each chosen on DEV.\relax }}{48}{table.caption.40}%

@@ -1,0 +1,141 @@
+note: Running TeX ...
+Fontconfig error: Cannot load default config file: No such file: (null)
+note: downloading newunicodechar.sty
+warning: algorithm.sty:11: 
+Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
+warning: JPEG: Inconsistent resolution may have been specified in Exif and JFIF: 0x0 - 96x96
+warning: main.lof:25: Underfull \hbox (badness 1077) in paragraph at lines 25--25
+warning: chapters/chapter_1:373: Underfull \hbox (badness 1546) in paragraph at lines 372--373
+warning: chapters/chapter_2:247: Underfull \hbox (badness 1845) in paragraph at lines 246--247
+warning: chapters/chapter_2:528: Underfull \hbox (badness 1062) in paragraph at lines 527--528
+warning: chapters/chapter_2:528: Underfull \hbox (badness 1184) in paragraph at lines 527--528
+warning: chapters/chapter_3:27: Underfull \hbox (badness 10000) in paragraph at lines 27--27
+warning: chapters/chapter_3:31: Underfull \hbox (badness 10000) in paragraph at lines 31--31
+warning: chapters/chapter_3:37: Underfull \hbox (badness 10000) in paragraph at lines 36--37
+warning: chapters/chapter_3:37: Underfull \hbox (badness 10000) in paragraph at lines 37--37
+warning: chapters/chapter_3:38: Underfull \hbox (badness 2050) in paragraph at lines 38--38
+warning: chapters/chapter_3:38: Underfull \hbox (badness 1796) in paragraph at lines 38--38
+warning: chapters/chapter_3:39: Underfull \hbox (badness 10000) in paragraph at lines 38--39
+warning: chapters/chapter_3:40: Underfull \hbox (badness 1097) in paragraph at lines 40--40
+warning: chapters/chapter_3:40: Underfull \hbox (badness 10000) in paragraph at lines 40--40
+warning: chapters/chapter_3:41: Underfull \hbox (badness 10000) in paragraph at lines 40--41
+warning: chapters/chapter_3:41: Underfull \hbox (badness 2856) in paragraph at lines 41--41
+warning: chapters/chapter_3:41: Underfull \hbox (badness 10000) in paragraph at lines 41--41
+warning: chapters/chapter_3:41: Underfull \hbox (badness 7685) in paragraph at lines 41--41
+warning: chapters/chapter_3:42: Underfull \hbox (badness 10000) in paragraph at lines 41--42
+warning: chapters/chapter_3:42: Underfull \hbox (badness 10000) in paragraph at lines 41--42
+warning: chapters/chapter_3:42: Underfull \hbox (badness 10000) in paragraph at lines 41--42
+warning: chapters/chapter_3:42: Underfull \hbox (badness 10000) in paragraph at lines 42--42
+warning: chapters/chapter_3:42: Underfull \hbox (badness 10000) in paragraph at lines 42--42
+warning: chapters/chapter_3:43: Underfull \hbox (badness 10000) in paragraph at lines 42--43
+warning: chapters/chapter_3:43: Underfull \hbox (badness 10000) in paragraph at lines 42--43
+warning: chapters/chapter_3:43: Underfull \hbox (badness 10000) in paragraph at lines 43--43
+warning: chapters/chapter_3:45: Underfull \hbox (badness 10000) in paragraph at lines 44--45
+warning: chapters/chapter_3:45: Underfull \hbox (badness 2809) in paragraph at lines 45--45
+warning: chapters/chapter_3:45: Underfull \hbox (badness 1990) in paragraph at lines 45--45
+warning: chapters/chapter_3:134: Underfull \hbox (badness 7558) in paragraph at lines 134--134
+warning: main.tex:117: Underfull \hbox (badness 3386) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 4713) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 1077) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 5490) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 1661) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 1540) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 3492) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 4621) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 1205) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 2351) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 6961) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 2495) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 2165) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+note: Running external tool biber ...
+note: Rerunning TeX because biber was run ...
+warning: algorithm.sty:11: 
+Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
+warning: JPEG: Inconsistent resolution may have been specified in Exif and JFIF: 0x0 - 96x96
+warning: main.lof:25: Underfull \hbox (badness 1077) in paragraph at lines 25--25
+warning: chapters/chapter_1:373: Underfull \hbox (badness 1546) in paragraph at lines 372--373
+warning: chapters/chapter_2:247: Underfull \hbox (badness 1845) in paragraph at lines 246--247
+warning: chapters/chapter_2:528: Underfull \hbox (badness 1062) in paragraph at lines 527--528
+warning: chapters/chapter_2:528: Underfull \hbox (badness 1184) in paragraph at lines 527--528
+warning: chapters/chapter_3:27: Underfull \hbox (badness 10000) in paragraph at lines 27--27
+warning: chapters/chapter_3:31: Underfull \hbox (badness 10000) in paragraph at lines 31--31
+warning: chapters/chapter_3:37: Underfull \hbox (badness 10000) in paragraph at lines 36--37
+warning: chapters/chapter_3:37: Underfull \hbox (badness 10000) in paragraph at lines 37--37
+warning: chapters/chapter_3:38: Underfull \hbox (badness 2050) in paragraph at lines 38--38
+warning: chapters/chapter_3:38: Underfull \hbox (badness 1796) in paragraph at lines 38--38
+warning: chapters/chapter_3:39: Underfull \hbox (badness 10000) in paragraph at lines 38--39
+warning: chapters/chapter_3:40: Underfull \hbox (badness 1097) in paragraph at lines 40--40
+warning: chapters/chapter_3:40: Underfull \hbox (badness 10000) in paragraph at lines 40--40
+warning: chapters/chapter_3:41: Underfull \hbox (badness 10000) in paragraph at lines 40--41
+warning: chapters/chapter_3:41: Underfull \hbox (badness 2856) in paragraph at lines 41--41
+warning: chapters/chapter_3:41: Underfull \hbox (badness 10000) in paragraph at lines 41--41
+warning: chapters/chapter_3:41: Underfull \hbox (badness 7685) in paragraph at lines 41--41
+warning: chapters/chapter_3:42: Underfull \hbox (badness 10000) in paragraph at lines 41--42
+warning: chapters/chapter_3:42: Underfull \hbox (badness 10000) in paragraph at lines 41--42
+warning: chapters/chapter_3:42: Underfull \hbox (badness 10000) in paragraph at lines 41--42
+warning: chapters/chapter_3:42: Underfull \hbox (badness 10000) in paragraph at lines 42--42
+warning: chapters/chapter_3:42: Underfull \hbox (badness 10000) in paragraph at lines 42--42
+warning: chapters/chapter_3:43: Underfull \hbox (badness 10000) in paragraph at lines 42--43
+warning: chapters/chapter_3:43: Underfull \hbox (badness 10000) in paragraph at lines 42--43
+warning: chapters/chapter_3:43: Underfull \hbox (badness 10000) in paragraph at lines 43--43
+warning: chapters/chapter_3:45: Underfull \hbox (badness 10000) in paragraph at lines 44--45
+warning: chapters/chapter_3:45: Underfull \hbox (badness 2809) in paragraph at lines 45--45
+warning: chapters/chapter_3:45: Underfull \hbox (badness 1990) in paragraph at lines 45--45
+warning: chapters/chapter_3:134: Underfull \hbox (badness 7558) in paragraph at lines 134--134
+warning: main.tex:117: Underfull \hbox (badness 3386) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 4713) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 1077) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 5490) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 1661) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 1540) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 3492) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 4621) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 1205) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 2351) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 6961) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 2495) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 2165) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: main.tex:117: Underfull \hbox (badness 10000) in paragraph at lines 117--117
+warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details.
+note: Running xdvipdfmx ...
+warning: JPEG: Inconsistent resolution may have been specified in Exif and JFIF: 0x0 - 96x96
+note: Writing `main.bbl` (218.5322265625 KiB)
+note: Writing `main.lof` (5.4521484375 KiB)
+note: Writing `main.aux` (67.5185546875 KiB)
+note: Writing `main.pdf` (511.5458984375 KiB)
+note: Writing `main.lot` (2.12109375 KiB)
+note: Writing `main.blg` (1.060546875 KiB)
+note: Writing `main.bcf` (133.2099609375 KiB)
+note: Writing `main.toc` (7.3603515625 KiB)
+note: Writing `main.out` (15.09765625 KiB)
+note: Writing `main.run.xml` (2.392578125 KiB)
+note: Writing `main.log` (47.30078125 KiB)

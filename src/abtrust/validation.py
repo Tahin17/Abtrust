@@ -12,9 +12,11 @@ Run everything with ``abtrust validate``.
 
 from __future__ import annotations
 
+import hashlib
+import inspect
 import time
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 import pandas as pd
@@ -24,6 +26,7 @@ from .checks import srm_test
 from .design import sample_size_mean, sample_size_proportion
 from .estimators import cuped, lin_adjustment, ratio_delta, welch_ttest
 from .multiple import adjust
+from .provenance import runtime_provenance, utc_now
 from .sequential import sequential_test, tau_from_design
 from .simulate import pre_post_normal, sessions_clicks, zero_inflated_lognormal
 
@@ -49,10 +52,17 @@ class StudyResult:
     table: pd.DataFrame
     headline: str
     seconds: float
+    metadata: dict = field(default_factory=dict)
 
 
 def _mcse(rate: float, n: int) -> float:
     return float(np.sqrt(max(rate * (1 - rate), 1e-12) / n))
+
+
+def _table(rows: list[dict], **design) -> pd.DataFrame:
+    table = pd.DataFrame(rows)
+    table.attrs["design"] = design
+    return table
 
 
 # ----------------------------------------------------------------- 1. type-I error
@@ -99,7 +109,8 @@ def study_type1_coverage(n_sims: int = 4000, seed: int = 1) -> pd.DataFrame:
                     n_sims=n_sims,
                 )
             )
-    return pd.DataFrame(rows)
+    return _table(rows, conversion_rate=p_conv, revenue=rev, relative_effect=lift,
+                  n_per_arm=[500, 2000, 10000], alpha=ALPHA)
 
 
 # ------------------------------------------------------------------- 2. peeking
@@ -185,7 +196,9 @@ def study_peeking(n_sims: int = 3000, seed: int = 2, n_max: int = 10_000, base_r
                          mean_sample_fraction=float(np.mean(bounded_stop_frac)),
                          simultaneous_coverage=bounded_cover_all / n_sims,
                          naive_simultaneous_coverage=naive_cover_all / n_sims))
-    return pd.DataFrame(rows)
+    return _table(rows, n_per_arm=n_max, baseline=base_rate, mde=mde, looks=list(look_grid),
+                  tau=tau, alpha=ALPHA, effect_multipliers=[0, 1, 2],
+                  modes=["working_normal", "bounded"])
 
 
 # ---------------------------------------------------------------------- 3. CUPED
@@ -242,7 +255,8 @@ def study_cuped(n_sims: int = 3000, seed: int = 3, n: int = 1_000) -> pd.DataFra
                     n_sims=n_sims,
                 )
             )
-    return pd.DataFrame(rows)
+    return _table(rows, n_per_arm=n, effect=effect, mean=10.0, sd=1.0,
+                  rho=[0.0, 0.3, 0.5, 0.7, 0.9], alpha=ALPHA)
 
 
 # --------------------------------------------------------------- 4. ratio metrics
@@ -298,7 +312,8 @@ def study_ratio_metrics(n_sims: int = 3000, seed: int = 4, n_users: int = 2_000)
                     n_sims=n_sims,
                 )
             )
-    return pd.DataFrame(rows)
+    return _table(rows, n_users=n_users, ctr=ctr, relative_effect=lift, mean_sessions=6.0,
+                  icc=[0.0, 0.02, 0.05, 0.10, 0.20], alpha=ALPHA)
 
 
 # ------------------------------------------------------------------------- 5. SRM
@@ -318,7 +333,8 @@ def study_srm(n_sims: int = 2000, seed: int = 5) -> pd.DataFrame:
                     n_total=n_total, treatment_share=share, detection_rate=rate, mcse=_mcse(rate, n_sims), n_sims=n_sims
                 )
             )
-    return pd.DataFrame(rows)
+    return _table(rows, n_total=[10000, 100000, 1000000], expected_split=[0.5, 0.5],
+                  treatment_share=[0.500, 0.501, 0.5025, 0.505, 0.510], threshold=0.001)
 
 
 # --------------------------------------------------------- 6. power calibration
@@ -393,7 +409,9 @@ def study_power_calibration(n_sims: int = 2000, seed: int = 6) -> pd.DataFrame:
             n_sims=n_sims,
         )
     )
-    return pd.DataFrame(rows)
+    return _table(rows, target_power=0.8, conversion={"baseline": 0.10, "relative_effect": 0.10},
+                  revenue={"p_purchase": p, "mu": mu, "sigma": sg, "relative_effect": 0.2},
+                  cuped={"rho": rho, "effect": eff, "sd": 1.0}, alpha=ALPHA)
 
 
 # ------------------------------------------------------------ 7. multiple testing
@@ -438,7 +456,8 @@ def study_multiple_testing(n_sims: int = 3000, seed: int = 7, n: int = 2_000) ->
                         n_sims=n_sims,
                     )
                 )
-    return pd.DataFrame(rows)
+    return _table(rows, n_per_arm=n, effect=effect, metrics=[1, 5, 14, 50],
+                  real_metric_count="max(metrics // 5, 1) in the alternative scenario", alpha=ALPHA)
 
 
 # --------------------------------------------------------------------- runner
@@ -508,15 +527,27 @@ STUDIES: dict[str, tuple[str, Callable[..., pd.DataFrame], int]] = {
 
 def run_all(scale: float = 1.0, only: list[str] | None = None, verbose: bool = True) -> dict[str, StudyResult]:
     """Run every study. ``scale`` multiplies the number of simulations (0.1 = quick)."""
+    if not np.isfinite(scale) or scale <= 0:
+        raise ValueError("scale must be finite and positive")
+    if only is not None and (not only or set(only) - set(STUDIES)):
+        raise ValueError(f"unknown or empty study selection; choose from {', '.join(STUDIES)}")
+    runtime = runtime_provenance()
     out: dict[str, StudyResult] = {}
     for name, (question, fn, default_sims) in STUDIES.items():
         if only and name not in only:
             continue
         sims = max(int(default_sims * scale), 50)
+        started = utc_now()
         t0 = time.perf_counter()
         table = fn(n_sims=sims)
         secs = time.perf_counter() - t0
-        out[name] = StudyResult(name, question, table, _headline(name, table), secs)
+        bound = inspect.signature(fn).bind_partial(n_sims=sims)
+        bound.apply_defaults()
+        metadata = {"simulated_at_utc": started, "runtime": runtime, "scale": scale,
+                    "parameters": dict(bound.arguments), "alpha": ALPHA,
+                    "implementation_sha256": hashlib.sha256(inspect.getsource(fn).encode("utf-8")).hexdigest(),
+                    "scenario_configuration": table.attrs.get("design", {})}
+        out[name] = StudyResult(name, question, table, _headline(name, table), secs, metadata)
         if verbose:
             print(f"[{name}] {secs:.1f}s  {out[name].headline}", flush=True)
     return out

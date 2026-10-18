@@ -1,67 +1,68 @@
 # abtrust 0.3.0 — Verification results
 
-Updated **18 October 2026 (Asia/Dhaka)** after the repository review and corrections. This supersedes the earlier offline-release verification notes.
+Updated **19 October 2026 (Asia/Dhaka)**. These are observed local results; older 83/88-test notes are historical.
 
-## Environment
+## Environment and reproducibility
 
-Windows, Python **3.10.11**, existing `.venv_v03`, with imports resolving to this checkout's `src/abtrust`.
+A new `.venv_verify` installed `.[dev,app]` from this checkout using Python **3.10.11** on Windows. The exact installed versions are saved in `requirements-verified-windows.txt`: NumPy 2.2.6, SciPy 1.15.3, pandas 2.3.3, matplotlib 3.10.9, Streamlit 1.65.0, pytest 9.1.1 and Ruff 0.17.1. BLAS/OpenMP thread counts were limited to one. Real Streamlit checks needed execution outside the managed socket-restricted sandbox.
 
-| Dependency | Version |
-|---|---|
-| numpy | 2.2.6 |
-| scipy | 1.15.3 |
-| pandas | 2.3.3 |
-| matplotlib | 3.10.9 |
-| streamlit | 1.65.0 |
-| pytest | 9.1.1 |
-| Ruff | 0.17.1 |
+Run the complete workflow from the repository root:
 
-The successful full verification used `OPENBLAS_NUM_THREADS=1`, `OMP_NUM_THREADS=1`, and `MKL_NUM_THREADS=1` to limit memory use. The managed sandbox hung while Python created a local event-loop socket, before Streamlit executed the app; actual Streamlit checks succeeded outside that sandbox.
+```powershell
+.\.venv_verify\Scripts\python.exe scripts/verify.py --integration --full
+```
+
+It regenerates the full-budget reports and records command exit codes in [execution.json](../reports/verification/execution.json). The cached Hillstrom file is used only when present. See [reproducibility instructions](REPRODUCIBILITY.md) for fresh setup, individual commands, manifests and render-only operation.
 
 ## Completed checks
 
 | Check | Observed result |
 |---|---|
-| Full pytest with `ABTRUST_RUN_STREAMLIT_INTEGRATION=1` | **88 passed in 23.64 seconds** in the final run, including the real Streamlit test |
-| `ruff check . --no-cache` | **All checks passed** |
-| `python -m abtrust.cli validate` | All **seven full-budget studies** completed; Markdown, seven CSVs, metadata and four validation figures regenerated |
-| `python scripts/case_study.py` | Completed; simulated checkout reports, two figures and 40,000-user sample regenerated; original generated unit IDs verified |
-| `python scripts/hillstrom.py --csv data/hillstrom.csv` | Completed using the existing real-data cache; report regenerated; **REVIEW REQUIRED** |
-| CLI version and planning examples | v0.3.0; conversion example returns **57,760 per arm**, 115,520 total, 5.8 days; continuous/CUPED planning example completed |
-| CLI sample CSV analysis | Five comparisons, Holm correction, Markdown output and missing-guardrail-margin decision checked |
+| Fresh-environment full workflow | Every command exited zero; `all_checks_passed: true` |
+| Final pytest including actual Streamlit AppTest | **122 passed in 35.49 seconds** |
+| Default pytest behavior | 121 tests plus one intentionally opt-in Streamlit test |
+| Ruff | All checks passed |
+| Core Monte Carlo validation | All **seven full-budget studies** completed |
+| Supplemental stress validation | Two studies, **2,000 replications per cell**, completed separately from core results |
+| Synthetic checkout | 200,000 randomized users, figures, readouts and simulation provenance regenerated |
+| Cached real Hillstrom experiment | 64,000 customers analyzed; explicitly labelled real data; REVIEW REQUIRED |
+| CLI version/planning | v0.3.0; conversion example 57,760 per arm, 115,520 total, 5.8 days |
+| Render-only operation | Core CSVs and simulation manifest remained byte-for-byte unchanged; core and stress presentations rebuilt |
 
-The four new regression tests were first run against the previous implementation and failed on the intended bugs, then passed after the corrections. The real Streamlit test now also changes analysis alpha, exercises invalid planner inputs, and verifies recovery to a valid plan. Without the opt-in environment variable, expect **87 passed, 1 skipped**.
+[Render integrity evidence](../reports/verification/render-integrity.json) records the saved-file comparison. Simulation manifests contain actual replication counts, seeds, design parameters, file hashes and source/runtime provenance. Rendering has its own timestamp. Analysis sidecars identify generated simulation, real data or user-supplied data. A checksum detects later changes; it does not prove the statistical assumptions.
 
-Additional Unicode cases reproduced the Windows legacy-encoding problem in the CLI and validation report. Report writers now explicitly use UTF-8, and the saved validation report was rendered again from the completed full-budget CSVs without rerunning or reducing the simulations.
+Git history now exists: baseline `2f959bd` on `main`, remote `Tahin17/Abtrust`. Execution manifests truthfully record that baseline plus a dirty working tree/source hash at run time. Remote GitHub Actions and other Python/OS combinations were **not executed locally**. The expanded CI matrix requires a later push.
 
 ## Browser acceptance
 
-The actual dashboard ran at `http://127.0.0.1:8510` in the in-app browser. Verified through browser interactions:
+The dashboard ran at localhost port 8510. Verified interactions include:
 
-- Sample table, equal-allocation SRM pass, conservative decision, result table, and plot rendered.
-- Analysis alpha 0.10 displayed **90%** confidence intervals in the caption.
-- Custom 40/40 allocation was rejected with an 80%-total error.
-- A nonnumeric guardrail harm margin was rejected.
-- Baseline 0.90 and relative MDE 0.20 displayed the implied **108%** rate as a readable error; restoring 0.10/0.05 restored the 57,760-per-arm plan.
-- Both peeking modes ran for 400 simulated experiments at 20 looks. Naive false positives were 26.5%; bounded 0.0%; working-normal 1.0%, with the approximation warning visible. These are demonstration simulations, distinct from the full validation suite.
-- The Markdown download completed; its actual downloaded contents included the decision, SRM result, five-comparison results and guardrail notes.
+- Built-in sample table, plot, SRM pass and conservative decision; 90% confidence label after changing alpha.
+- Actual synthetic 20/80 CSV upload: SRM fails under 50/50 and passes under its predeclared 20/80 design.
+- Actual duplicate-ID upload: rejected with a one-row-per-randomized-unit error.
+- Actual one-column upload: readable arm/outcome schema error.
+- Invalid custom allocations (40/40 total and zero percentage); invalid harm margins (`abc`, `-1`, `nan`).
+- Blank guardrail margins produce REVIEW REQUIRED; zero margins do not establish safety.
+- Higher-is-better direction: downloaded harm bound 0.001867 matched an independent core calculation.
+- Planner rejects an impossible 108% conversion rate and recovers to a valid plan.
+- Both peeking demonstration modes and their caveats; actual Markdown downloads checked.
 
-Screenshot: [planner validation](../reports/verification/planner-validation.png).
+Evidence: [browser record](../reports/verification/browser.json), [20/80 upload screenshot](../reports/verification/upload-20-80.png), [duplicate-ID screenshot](../reports/verification/upload-duplicate-id.png), [planner screenshot](../reports/verification/planner-validation.png).
 
-**Still unverified through the browser:** CSV file uploads and upload-dependent cases. The browser automation's file chooser timed out, including a retry through the actual file input. Automated helper and UI-stub tests passed for valid CSVs, malformed files, custom 20/80 allocation, missing arm labels, duplicate unit IDs, and invalid numerical outcomes. These tests do not substitute for a completed browser file selection. The remaining manual cases are listed in [DASHBOARD_QA.md](DASHBOARD_QA.md).
+**Remaining browser-only acceptance:** uploaded empty file, missing arm labels, missing/infinite outcomes, and uploaded public sample CSV. Automated tests cover these validation paths, but that does not substitute for browser acceptance. Browser file transfers took minutes despite short timeouts. The [dashboard checklist](DASHBOARD_QA.md) preserves partial checks rather than marking whole groups complete.
 
-Remote GitHub Actions and Python versions other than the local 3.10.11 were not executed in this session. This extracted folder has no `.git` directory; commit history was not reconstructed.
+## Statistical findings and limits
 
-## Corrected simulation interpretation
+- All Monte Carlo and checkout results are **simulations**, limited to their stated conditions. Hillstrom is real randomized experimental data.
+- The rare binary stress scenario (400 per arm, baseline probability 0.002, true difference 0.001) achieved only **84.75% coverage** for a nominal 95% Welch interval over 2,000 replications. This sparse-event approximation is unreliable in that setting. Monte Carlo standard error for coverage was about 0.80 percentage points.
+- Deliberately removing low treatment outcomes produces near-certain false rejection. Those rows are marked **invalid selection** and demonstrate assumption failure, not estimator performance on valid randomization.
+- Correlated covariates, unequal allocation and constant fixtures completed; constants are deterministic checks, not Monte Carlo accuracy evidence.
+- Known-Gaussian sequential null rejection rates were 0.15%, 1.05% and 1.30% at 1, 20 and 100 looks in the tested configuration. These simulations do not establish validity outside the stated Gaussian, known-variance assumptions.
+- Working-normal mSPRT remains exploratory. It has no newly claimed anytime-valid guarantee. Bounded methods retain their explicit bounds and error-spending assumptions.
+- Corrected core bounded power at twice the MDE is 78.8% at one look versus 0.23% at 100 looks. Many-look conservatism is a real limitation of that design.
+- The simulated checkout still returns REVIEW REQUIRED because guardrail harm margins were not declared. Hillstrom lacks documented original unit IDs and configured safety outcomes, so also remains REVIEW REQUIRED.
+- Ordinary confidence intervals remain unadjusted; Holm/BH p-value corrections and conservative guardrail bounds are separate quantities.
 
-Each bounded monitoring schedule now calls `sequential_test(..., looks=k, mode="bounded")`, spending its error budget from that schedule's own first look. Previous rows for fewer than 100 looks incorrectly inherited the 100-look weights.
+## Distribution verification
 
-At twice the MDE, the corrected bounded procedure detected the effect in **78.8%** of simulations with one look, versus **0.23%** with 100 looks. The many-look procedure remains conservative in this scenario. The existing 100-look headline results, including 38.1% naive and 1.6% working-normal false positives, were reproduced. The power-calibration report now shows the actual **500** revenue replications alongside the two **2,000**-replication designs.
-
-## Scientific qualifications
-
-- All Monte Carlo and checkout results are **simulations**, with conclusions limited to their tested conditions.
-- The working-normal mSPRT remains exploratory, not proved anytime-valid; the other modes retain their stated assumptions.
-- The simulated checkout still returns `REVIEW REQUIRED` because guardrail harm margins are missing.
-- Hillstrom is real randomized experimental data, but lacks documented original unit IDs and configured safety outcomes; it remains `REVIEW REQUIRED`.
-- Ordinary intervals remain unadjusted; p-value corrections and conservative guardrail bounds remain separate.
+The isolated build produced a source archive and a platform-independent wheel. The wheel installed into a separate core-only environment. From a temporary directory outside the repository, imports resolved to that environment; bounded sequential inference, CLI version, planning, a small SRM simulation and render-only operation all completed successfully. Source archive content and artifact hashes are recorded in [distribution.json](../reports/verification/distribution.json). Git attributes preserve exact result bytes across checkout platforms. No package has been published and no remote CI result is claimed.

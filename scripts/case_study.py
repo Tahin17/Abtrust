@@ -28,6 +28,7 @@ from scipy import stats
 
 import abtrust as ab
 from abtrust import plots
+from abtrust.provenance import write_analysis_manifest
 from abtrust.report import md_table
 from abtrust.simulate import ecommerce_experiment
 
@@ -392,7 +393,7 @@ def main() -> None:
         naive=dict(
             conversion=n_conv.to_dict(),
             revenue=n_rev.to_dict(),
-            orders_per_session=fixed_naive_ops,
+            orders_per_session=n_ops,
             false_positives=naive_false,
             peeking_stop_day=None if naive_stop is None else naive_stop + 1,
         ),
@@ -407,6 +408,13 @@ def main() -> None:
         ),
     )
     (OUT / "case_study.json").write_text(json.dumps(summary, indent=2, default=float), encoding="utf-8")
+    write_analysis_manifest(OUT / "case_study.manifest.json", data_kind="simulation", settings={
+        "generator": "ecommerce_experiment", "n_users": 200000, "seed": 2026,
+        "lift": 0.04, "legacy_logging_loss": 0.6, "n_null_metrics": 12,
+        "sample_size": 40000, "sample_seed": 7, "alpha": ALPHA,
+        "correction": readout.correction, "monitoring_fractions": looks.tolist(),
+        "sequential_mode": seq.mode, "tau": tau, "guardrail_harm_margins": None,
+        "populations": ["all_users", "excluding_android_legacy"]})
 
     # small clean sample for the demo app and CLI examples
     sample = fixed.sample(40_000, random_state=7).sort_values("user_id")

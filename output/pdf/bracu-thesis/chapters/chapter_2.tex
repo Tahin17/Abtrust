@@ -1,0 +1,604 @@
+\hl{The work relevant to this thesis comes from research streams that
+have developed largely separately: Bangla dialect processing, Bangla
+question answering, Bangla language models, and applications of language
+technology in healthcare and education. This chapter first introduces
+the concepts the thesis builds on, then reviews the related work,
+highlighting its achievements and limitations, and ends with the gaps
+that the proposed framework addresses.}
+
+\section{Preliminaries}\label{preliminaries}
+
+\subsection{Bangla and Its Regional Varieties}\label{bangla-and-its-regional-varieties}
+
+\hl{Standard Bangla (cholito bhasha) is the form used in formal writing,
+education, broadcasting and administration. The regional varieties form
+a continuum across Bangladesh and differ from the standard in
+pronunciation, vocabulary, verb morphology and sometimes word order, in
+some regions vastly so \cite{jawad2026fivedialects}, \cite{faria2023vashantor}. Chittagonian, spoken in the
+south-east, and Sylheti, spoken in the north-east, are among the most
+divergent. Online, dialect speakers write in Bangla script with phonetic
+spellings of dialect words, or in Latin script (romanized Bangla, often
+called Banglish); Sylheti also has a historical script of its own,
+Sylheti Nagri \cite{jawad2026fivedialects}. A dialect sentence and its Standard equivalent
+can share very few word forms, sometimes none, although they convey
+exactly the same meaning, for example Sylheti \emph{kita} for Standard
+\emph{ki} (``what''), which is why systems trained on Standard Bangla
+misread dialect input.}
+
+\subsection{Dialect Identification and Normalization}\label{dialect-identification-and-normalization}
+
+\hl{Dialect identification predicts the variety a text is written in and
+is usually treated as text classification \cite{faria2023vashantor}. Dialect normalization
+rewrites a dialect text in the standard variety while keeping its
+meaning, which makes it a form of machine translation \cite{faria2023vashantor}, \cite{jawad2026fivedialects}.
+Its quality is measured with BLEU \cite{papineni2002bleu}, the character n-gram
+F-scores chrF and chrF++ \cite{popovic2015chrf}, \cite{popovic2017chrfpp}, and word or character error
+rate (WER, CER). A useful sanity check is the copy-input baseline, which
+scores the unchanged dialect input against the Standard reference: a
+system that scores below it has made the text worse \cite{jawad2026fivedialects}.}
+
+Both tasks are long-standing problems in NLP for closely related
+languages, varieties and dialects \cite{zampieri2020survey}. Dialect identification
+is usually framed as supervised text classification, and in shared tasks
+for Arabic it has reached high scores: the best systems of NADI 2023
+reached a macro-F1 of 87.27 on country-level Arabic dialect
+identification \cite{abdulmageed2023nadi}. Normalization is much harder than
+identification. In the same shared task, the best systems that
+translated Arabic dialects into Modern Standard Arabic reached only
+14.76 and 21.10 BLEU on the two machine-translation subtasks
+\cite{abdulmageed2023nadi}. Normalization is easier to learn when parallel
+dialect--standard data exist, as in the MADAR corpus of 25 city
+dialects \cite{bouamor2018madar}, and character-level models suit it because dialect
+words are often spelling variants of standard words: for Swiss German,
+character-based neural translation was the best normalization strategy
+\cite{honnet2018swissgerman}.
+
+Romanized input is a related problem. Bangla written in Latin letters
+has no fixed spelling, so the same word appears in many forms, and
+converting it back into Bangla script (back-transliteration) is a task
+of its own. BanglaTLit provides 42.7k romanized--Bangla-script pairs for
+this task, together with a 245.7k-sample romanized pre-training corpus
+\cite{fahim2024banglatlit}. In this thesis, romanized questions are
+normalized by the same expert that normalizes dialect questions, so
+back-transliteration and dialect normalization are handled in one step.
+
+\subsection{Question Answering}\label{question-answering}
+
+\hl{In extractive QA the answer is a span of a given passage, scored
+with exact match (EM) and token-level F1 \cite{ekram2022banglarqa}; in multiple-choice QA
+the system picks an option and is scored by accuracy \cite{shafayat2024benqa}, \cite{shifa2025somajgyaan};
+in open-domain QA the system must first find the evidence itself,
+usually with a retriever followed by a reader \cite{karpukhin2020dpr}. When the answer
+is generated in the system's own words, evaluation relies on semantic
+similarity measures such as BERTScore \cite{zhang2020bertscore} and on checking whether
+the generated answer is supported by the evidence \cite{es2024ragas}. A realistic
+system must also recognise questions it cannot answer. SQuAD 2.0 added
+more than 50,000 unanswerable questions written adversarially by crowd
+workers to look answerable, and showed that models trained only on
+answerable questions answer them confidently \cite{rajpurkar2018squad2}. Selective QA
+trains a calibrator that lets a model abstain when it is unsure, trading
+coverage for accuracy \cite{kamath2020selective}.}
+
+\hl{Most of the early Bangla QA systems follow the reading-comprehension
+setting, where the passage is given for context and answer searching. A
+practical system must instead first retrieve relevant documents from a
+knowledge base with a retriever and then pass the top-k documents to a
+reader model, which is the retriever--reader design of open-domain QA
+\cite{karpukhin2020dpr}. The framework in this research follows that design, with an
+LLM as the reader.}
+
+\subsection{Large Language Models and Parameter-Efficient Fine-Tuning}\label{large-language-models-and-parameter-efficient-fine-tuning}
+
+\hl{Modern LLMs are Transformers pre-trained on large text collections
+and then instruction-tuned. Updating all their parameters is too
+expensive for most academic budgets. LoRA freezes each pretrained weight
+matrix \emph{W} \ensuremath{\in} \ensuremath{\mathbb{R}}\textsuperscript{d\ensuremath{\times}k} and learns a low-rank update
+\ensuremath{\Delta}\emph{W} = \emph{BA} with \emph{B} \ensuremath{\in} \ensuremath{\mathbb{R}}\textsuperscript{d\ensuremath{\times}r}, \emph{A} \ensuremath{\in}
+\ensuremath{\mathbb{R}}\textsuperscript{r\ensuremath{\times}k} and \emph{r} \ensuremath{\ll} min(\emph{d}, \emph{k}) \cite{hu2022lora}.
+Only \emph{A} and \emph{B} are trained, which reduces the number of
+trainable parameters by several orders of magnitude, and different
+adapters can be attached to the same base model for different tasks.
+QLoRA stores the frozen base model in 4-bit NormalFloat (NF4) precision
+with double quantization and paged optimizers and back-propagates
+through it into the LoRA adapters, so billion-parameter models can be
+fine-tuned on one GPU with little loss in quality \cite{dettmers2023qlora}.}
+
+\subsection{Retrieval-Augmented Generation}\label{retrieval-augmented-generation}
+
+\hl{RAG combines a retriever that finds passages relevant to the
+question with a generator that writes the answer from them \cite{lewis2020rag}.
+Sparse retrieval such as BM25 scores documents by weighted term overlap
+and works well when question and document share words \cite{robertson2009bm25}. Dense
+retrieval encodes questions and passages as vectors and ranks by vector
+similarity, which also matches paraphrases and synonyms \cite{karpukhin2020dpr};
+multilingual embedding models such as multilingual E5 and BGE-M3 support
+Bangla \cite{chen2024bgem3}, \cite{wang2024me5}. Hybrid systems fuse sparse and dense
+rankings, typically with reciprocal rank fusion (RRF) \cite{cormack2009rrf}. Self-RAG
+trains the model to decide when to retrieve and to critique both the
+retrieved passages and its own output \cite{asai2024selfrag}, and Adaptive-RAG uses a
+small classifier to choose between no retrieval, single-step and
+multi-step retrieval according to question complexity \cite{jeong2024adaptiverag}.}
+
+\subsection{Mixture of Experts and Routing}\label{mixture-of-experts-and-routing}
+
+\hl{A mixture of experts is a set of specialised models with a gating
+function that decides how much each model contributes to each input
+\cite{jacobs1991adaptive}. In current LLMs, sparse mixture-of-experts layers send each
+token to a few expert sub-networks inside one model, which increases
+capacity at little extra compute \cite{shazeer2017moe}, \cite{fedus2022switch}. This thesis applies
+the idea at the system level rather than inside the network: separate
+lightweight routers send each question to one normalization expert and
+one domain expert, and each expert is an independently trained LoRA
+adapter on a shared base model. This is closer to Adaptive-RAG's small
+routing classifier \cite{jeong2024adaptiverag} and to adapter-based transfer \cite{houlsby2019adapters} than
+to a sparse MoE layer, so we call it a \emph{Mixture-of-Adapters}. It
+keeps each expert small, interpretable and replaceable.} Related methods
+that combine several adapters are reviewed in
+Section~\ref{combining-and-routing-lora-adapters}.
+
+\section{Review of Existing Research}\label{review-of-existing-research}
+
+\hl{Research relevant to dialect-aware Bangla QA has expanded rapidly
+since 2022. The reviewed work falls into nine themes: dialect resources
+and translation; dialects in health and LLM prompting; Bangla QA
+benchmarks; Bangla-capable language models; Bangla healthcare and
+education applications; dialect processing beyond Bangla; combining and
+routing LoRA adapters; re-ranking and hybrid retrieval; and grounding,
+abstention and dialect robustness. Table~\ref{tab:related-studies} summarises the most closely related studies.}
+
+\subsection{Dialect Resources and Dialect--Standard Translation}\label{dialect-resources-and-dialectstandard-translation}
+
+\hl{Vashantor was the first large benchmark for translating Bangla
+regional dialects into Standard Bangla \cite{faria2023vashantor}. It is multilingual
+(Bangla, romanized Bangla and English) and covers five regions
+(Chittagong, Noakhali, Sylhet, Barishal and Mymensingh) with 32,500
+sentences: 2,500 Standard sentences rendered in every region give 12,500
+dialect--Standard pairs, with an official split of 1,875 training, 250
+validation and 375 test sentences per region. In the first version of
+the paper, fine-tuned BanglaT5 reached a dialect\ensuremath{\rightarrow}Standard BLEU of 44.03
+for Chittagong and 51.08 for Sylhet (mT5: 36.75 and 51.32), and region
+detection reached 85.86\% accuracy, with Sylhet the hardest region (F1
+0.75) \cite{faria2023vashantor}. The revised version introduces DialectBanglaT5 and
+DialectBanglaBERT, reporting a best BLEU of 71.93 and lowest WER of
+0.1470 (Mymensingh) and 89.02\% region-detection accuracy (Chittagong F1
+0.9241). These results show that fine-tuning works across dialects, but
+the data are short everyday sentences, not domain-specific, and
+translation is the end task.}
+
+\hl{Several newer corpora extend the dialect data. Kothon provides
+human-validated Chittagonian--Standard and Sylheti--Standard sentence
+pairs \cite{kothon2026}, ONUBAD covers several regional dialects \cite{sultana2025onubad}, and
+ChatgaiyyaAlap provides Chittagonian--Standard pairs \cite{chatgaiyyaalap2025}. These
+corpora supply most of the training pairs of our normalization expert.
+5-Dialects-BN contains 6,000 manually verified utterances in five
+dialects (1,900 Chittagong, 1,500 Noakhali, 1,200 Sylhet, 700 Barisal,
+700 Rangpur), each with a romanized transliteration, a Standard Bangla
+translation, an English translation and a subjectivity label; Cohen's \ensuremath{\kappa}
+for the Standard Bangla renderings was 0.74 \cite{jawad2026fivedialects}. It evaluated seven
+LLMs with zero-shot, few-shot and chain-of-thought prompting and with
+LoRA. LoRA (\emph{r} = 16, \emph{\ensuremath{\alpha}} = 32) on 160 examples per dialect
+raised Mistral-7B from 16.2 to 73.6 BLEU on dialect\ensuremath{\rightarrow}English translation,
+above the zero-shot score of Gemini 3 Flash (46.4). Dialect\ensuremath{\rightarrow}Standard
+normalization was evaluated only with prompting: some open models scored
+below the copy-input baseline (39.66 chrF++), a fine-tuned BanglaT5
+reached 44.47 chrF++, and the best system, few-shot Gemini, reached
+78.70 chrF++. All models degraded on romanized input.}
+
+\hl{Work in the opposite direction translates Standard Bangla into
+dialects. Bridging Dialects fine-tuned BanglaT5, mT5 and mBART-50 to
+translate Standard Bangla into the five Vashantor dialects; after 50
+epochs BanglaT5 reached a WER of 0.2380 and CER of 0.1216 on Mymensingh
+but 0.7066 and 0.3706 on Chittagong, with Chittagong and Sylhet the
+hardest \cite{khandaker2024bridging}. BanglaDialecto built an end-to-end speech
+standardization pipeline for Noakhali: about 10 hours of speech, a
+fine-tuned Whisper recogniser (CER 0.8\%, WER 1.5\%), BanglaT5
+translation into Standard Bangla (BLEU 41.6) and speech synthesis
+\cite{samin2024bangladialecto}. It shows that dialect standardization can serve as an interface
+for other systems, but it covers one dialect and stops before any
+downstream task. None of these works connects dialect translation to
+retrieval or to answering a user's question.}
+
+\subsection{Dialects in Health and LLM Prompting}\label{dialects-in-health-and-llm-prompting}
+
+\hl{BanglaCHQ-Prantik translated the 2,350 consumer health questions of
+BanglaCHQ-Summ into Sylheti and 500 of them into Chittagonian with
+native-speaker translators, creating the first medical-domain dialect
+benchmark \cite{prantik2025}. The smaller Chittagonian subset reflects the fact
+that few annotators can read and write Chittagonian and that it has no
+standard orthography. It evaluated Qwen 2.5 3B, Gemma 3 1B, GPT-4o-mini
+and Gemini 2.5 Flash with zero-shot, one-shot, five-shot and
+chain-of-thought prompting in the Standard\ensuremath{\rightarrow}dialect direction; the best
+BLEU was 23.67 (Sylheti, Gemini, five-shot) against 14.78 for
+Chittagonian, with frequent errors in medical terms, numerals, idioms
+and spelling. This benchmark contains exactly the kind of dialectal
+health questions a healthcare QA system must handle, and it shows that
+prompting frontier models is not enough. Sylheti-CAP studied Sylheti
+translation in both directions on the Vashantor test set with
+context-aware prompting of several LLMs, reaching at most 53.72 chrF for
+Sylheti\ensuremath{\rightarrow}Standard \cite{prama2025sylheticap}. A comparison of RAG pipelines for
+Standard\ensuremath{\rightarrow}dialect translation in six dialects found that ten LLMs reached
+only 5--12 BLEU (WER 67--84\%) without retrieved examples, and that
+retrieving aligned sentence pairs worked better than retrieving
+transcripts (Chittagong BLEU 9\ensuremath{\rightarrow}26, WER 76\%\ensuremath{\rightarrow}55\%) \cite{sami2025comparative}. A smaller
+model, Llama-3.1-8B (WER 51.18), even outperformed the much larger
+GPT-OSS-120B (WER 52.65) \cite{sami2025comparative}, which indicates that parallel
+examples matter more than model size. The same group benchmarked 19 LLMs
+on questions in nine Bengali dialects and found far lower quality for
+Chittagonian (5.44/10) than for Tangail (7.68/10) \cite{sami2026dialectbias}. AmarDoctor,
+a multilingual triage application (81.08\% top-1 diagnostic precision on
+185 clinical vignettes), took a lexicon approach: its medical team
+linked 908 symptoms to 3,237 local variants, including Chittagonian and
+Sylheti, and the authors report that a general speech-to-text service
+struggled with dialect speech because of phonetic differences \cite{nahar2025amardoctor}. A
+lexicon, however, only covers the terms it contains. Together, these
+works show that prompting alone is weak for dialects, that retrieved
+examples help, and that medical dialect data are scarce, especially for
+Chittagonian.}
+
+\subsection{Bangla Question Answering Benchmarks}\label{bangla-question-answering-benchmarks}
+
+\hl{BanglaRQA is a human-annotated reading-comprehension dataset of
+14,889 question--answer pairs on 3,000 Bangla Wikipedia passages, 3,631
+of them unanswerable, with four question types (factoid, causal,
+confirmation and list) and three answer types (single span, multiple
+spans and yes/no); fine-tuned BanglaT5 reached 62.42 EM and 78.11 F1,
+with weaker performance on the more difficult question types \cite{ekram2022banglarqa}.
+The passages cover a wide variety of general-knowledge topics.}
+
+\hl{NCTB-QA contains 87,805 question--answer pairs from 50
+national-curriculum textbooks (grades 1--10), 57.25\% answerable and
+42.75\% unanswerable with plausible distractors, split 80/10/10 so that
+no context appears in two splits; fine-tuning raised BERT from 0.150 to
+0.620 F1 \cite{nctbqa}. The dataset is closely aligned with the national
+curriculum, which makes it a natural basis for the education expert;
+however, its questions were model-generated from the textbook contexts,
+so real student question types may be under-represented.}
+
+\hl{BEnQA has 5,161 parallel Bangla--English science multiple-choice
+questions from grade 8, 10 and 12 board exams; LLMs were consistently
+less accurate in Bangla, chain-of-thought helped reasoning questions,
+and appending the English translation of the question helped in all
+subjects \cite{shafayat2024benqa}. SOMAJGYAAN has 4,234 multiple-choice questions on
+Bangladeshi history, geography, economics, law and society, extracted
+from national-curriculum books, where closed models led (Gemini 2.0
+Flash 0.73, GPT-4o 0.69) and LoRA fine-tuning of open models did not
+close the gap \cite{shifa2025somajgyaan}.}
+
+\hl{Earlier systems were extractive and assumed that the correct passage
+is given. Mayeesha et al. translated SQuAD 2.0 into Bangla, fine-tuned
+multilingual BERT, DistilBERT and RoBERTa, tested them on a small
+human-annotated set from Bangla Wikipedia, and compared the model
+answers with answers from Bangla-speaking children as a human reference
+point \cite{mayeesha2021bengaliqa}. Khondoker et al. built about 3,000 question--answer
+pairs from NCTB textbooks of grades 6--10, where Bangla-BERT reached F1
+0.75 and EM 0.53 and RoBERTa Base performed worst (F1 0.19); dataset
+size and spelling errors were the main constraints \cite{khondoker2024unlocking}.}
+
+\hl{BanglaCQA extends BanglaRQA with 6.3K counterfactual contexts
+(42.28\% more contexts than the original) to test whether models use the
+passage or their memory; under counterfactual passages, models largely
+followed the passage and could not recover memorised answers (parametric
+similarity about 0.13--0.14) \cite{azmary2026banglacqa}. Combining factual, counterfactual
+and answerability data improved contextual answering, chain-of-thought
+prompting helped decoder-only LLMs distinguish factual from
+counterfactual knowledge, and the authors found LLM-based semantic
+similarity more reliable than traditional overlap scores for comparing
+Bangla answers \cite{azmary2026banglacqa}. For a RAG system, this means that the generator
+has to be trained to rely on the retrieved evidence. All of these
+benchmarks are in Standard Bangla, and none contains dialect questions.}
+
+\subsection{Bangla-Capable Language Models}\label{bangla-capable-language-models}
+
+\hl{BanglaBERT and BanglaT5 remain strong and efficient Bangla baselines
+for classification and generation \cite{bhattacharjee2022banglabert}, \cite{bhattacharjee2023banglanlg}. TigerLLM continually
+pre-trains small models on about 10 million tokens from 163 NCTB
+textbooks (grades 6--12) and instruction-tunes them on 100,000 Bangla
+instructions created from 500 human-written seed tasks; the paper
+describes 1B (LLaMA 3.2) and 9B (Gemma 2) models and reports that they
+outperform other open Bangla LLMs \cite{raihan2025tigerllm}. The released 1B checkpoint,
+however, has exactly the architecture and tokenizer of Gemma-3-1B, which
+is why this thesis pairs it with Gemma-3-1B. TituLLMs continually
+pre-train Llama-3.2 models on about 37 billion Bangla tokens with an
+extended tokenizer; the 3B model is a base (not instruction-tuned) model
+\cite{titulm2025}. General multilingual open models are the alternative: Gemma 3
+and Gemma 4 \cite{gemma4}, \cite{gemma3}, Qwen3 \cite{qwen3}, Llama 3.2 \cite{meta2024llama32} and
+Tiny Aya, whose ``Fire'' variant targets South Asian languages \cite{tinyaya}.
+Gemma 4 is trained on over 140 languages, is available in small
+``effective 2B'' and ``effective 4B'' edge sizes with a context of up to
+128K tokens, and is licensed under Apache 2.0 \cite{gemma4}. Whether Bangla
+continued pre-training still helps once a model is fine-tuned for the
+task had not been tested under a controlled budget; Chapter 5 does so.}
+
+Evaluations of general LLMs on Bangla point the same way. BenLLM-Eval
+tested ChatGPT, LLaMA-2 and Claude-2 zero-shot on a range of Bengali NLP
+tasks. In a few tasks these models matched or exceeded fine-tuned
+models, but in most tasks their performance was poor
+\cite{kabir2024benllmeval}. Massively multilingual instruction tuning is
+one response: the Aya model follows instructions in 101 languages, more
+than half of them lower-resourced, and outperforms earlier multilingual
+instruction-tuned models such as mT0 and BLOOMZ on most tasks
+\cite{ustun2024aya}. On Bangla QA, LLMs still answer less accurately than
+in English \cite{shafayat2024benqa}. Together, these results suggest
+that an open multilingual model needs task-specific adaptation for
+Bangla. They also motivate comparing several open base models under
+one identical fine-tuning budget, rather than choosing one by
+reputation.
+
+\subsection{Bangla Healthcare and Education Applications}\label{bangla-healthcare-and-education-applications}
+
+\hl{DocTalkBN is a corpus of expert telemedicine conversations from
+national health programmes: 557.63 hours of audio, 1,515 multi-turn
+patient conversations and 10,274 host--doctor question--answer
+transcripts in 26 specialties, about 1.7 million tokens in total
+\cite{saha2026doctalkbn}. Its benchmarks show that classifying doctor advice as safe or
+harmful is easy for current models (macro-F1 above 0.92), while four-way
+triage is hard (best macro-F1 0.463); the authors name
+retrieval-augmented generation over the corpus as future work.
+BanglaCHQ-Summ contains 2,350 real consumer health questions from an
+online consultation platform with human-written summaries; fine-tuned
+BanglaT5 reached a ROUGE-L of 48.35 \cite{khan2023banglachqsumm}. BanglaMedQA evaluates RAG
+strategies for Bangla medical multiple-choice questions and finds large
+gains from retrieval (for example 42.15\% \ensuremath{\rightarrow} 66.60\% for Llama-3.1-8B)
+\cite{banglamedqa}, in line with English evidence that retrieval improves medical
+QA \cite{xiong2024medrag} and that LLMs encode clinical knowledge \cite{singhal2023medpalm}.}
+
+\hl{Medical entity recognition on such informal text is hard.
+Bangla-HealthNER annotates 31,783 consumer health texts from a public
+online health platform with seven entity types (symptom, health
+condition, age, medicine, dosage, medical procedure and specialist), and
+the best model, BanglishBERT, reaches an F1 of only 56.13\% \cite{khan2023nervous}.
+The texts frequently switch between Bangla and English and come from
+writers of different regions, and Bangla's rich inflection and flexible
+word order make entity extraction harder than in English. Bangla MedER
+annotates 6,895 medical statements with entities such as medicine and
+chemical names, diseases, organs, pharmacological classes and hormones,
+and reports 89.58\% accuracy with an ensemble of two BERT branches,
+11.80 percentage points above a single BERT model \cite{aurpa2026banglameder}.}
+
+\hl{For education, a cross-national survey of 318 university students
+from the US and Bangladesh found that students already use LLMs for
+learning, with LLM use correlated with perceived literacy benefits (r =
+.59) and optimism towards AI (r = .41), alongside concerns about
+over-reliance, ethics and critical thinking \cite{hossain2025ailiteracy}. This evidence,
+however, concerns university students who are comfortable with English
+and Standard Bangla, not school students who might benefit most from
+curriculum support in their own dialect. Farzana et al. addressed the
+grading of written answers, which is still done manually in remote and
+rural schools with few qualified teachers: they built a synthetic
+bilingual dataset of 122,710 questions with 490,391 question--answer
+instances and fine-tuned Qwen3-8B with QLoRA to produce a score and
+short feedback, which graded Bangla and English written answers close to
+teachers (Spearman \ensuremath{\rho} = 0.936, MAE = 0.725 on 259 teacher-graded
+instances) \cite{farzana2026semantic}. This shows that parameter-efficient fine-tuning of
+open models is practical for Bangla education, and that answers should
+be judged by meaning rather than word overlap. None of these systems
+accepts dialect questions, retrieves evidence and generates grounded
+answers.}
+
+\subsection{Dialect Processing Beyond Bangla}\label{dialect-processing-beyond-bangla}
+
+The dialect problem is not specific to Bangla. DIALECTBENCH collected
+10 text-level tasks covering 281 varieties and found clear performance
+gaps between standard and non-standard varieties of the same language
+\cite{faisal2024dialectbench}. A study of LLMs on regional dialects in
+machine translation and speech recognition found that the size of this
+dialect gap depends on the training data, but not consistently across
+models and languages, so that no single fix works everywhere
+\cite{kantharuban2023dialectgap}. Arabic, which has a standard written
+variety and many spoken dialects, is the best-studied case: the MADAR
+corpus provides parallel sentences in 25 city dialects
+\cite{bouamor2018madar}, and the NADI shared tasks have run dialect
+identification at country and province level (NADI 2020 covered 100
+provinces in 21 countries) \cite{abdulmageed2020nadi} and, more recently,
+dialect-to-standard translation, where scores are still low
+\cite{abdulmageed2023nadi}. Swiss German, which is spoken but rarely
+written in a standard form, has been normalized into Standard German
+before translation with about 60,000 parallel words, and character-based
+translation worked best \cite{honnet2018swissgerman}.
+
+Two lessons carry over to Bangla. First, the dialect gap must be
+measured, because benchmarks in the standard variety hide it
+\cite{faisal2024dialectbench}, \cite{kantharuban2023dialectgap}. Second,
+normalizing dialect input into the standard variety lets existing
+standard-variety systems be reused \cite{honnet2018swissgerman}. Most of
+this work, however, evaluates identification or translation as end
+tasks. This thesis measures the effect of normalization on a downstream
+task, question answering, using the same questions in each variety.
+
+\subsection{Combining and Routing LoRA Adapters}\label{combining-and-routing-lora-adapters}
+
+Adapters are small trainable modules added to a frozen pre-trained model
+\cite{houlsby2019adapters}, and LoRA is a low-rank form of them
+\cite{hu2022lora}. Because each adapter is small, one base model can hold
+many of them, which raises the question of how to combine them.
+AdapterFusion learns to combine the representations of several
+task adapters for a new target task and outperformed full fine-tuning
+and multi-task learning on 16 language-understanding tasks
+\cite{pfeiffer2021adapterfusion}. LoraHub composes several LoRA modules
+for an unseen task by searching for mixing weights from a few examples,
+and comes close to in-context learning without needing the examples in
+the prompt \cite{huang2024lorahub}. Mixture of LoRA Experts (MoLE) learns a
+gating function that weights the outputs of several LoRA modules in each
+layer, and fuses them better than simple arithmetic merging
+\cite{wu2024mole}. X-LoRA uses the model's hidden states to mix LoRA
+experts at every layer and token \cite{buehler2024xlora}. On the systems side,
+S-LoRA serves thousands of LoRA adapters from one base model, with up to
+four times the throughput of earlier serving libraries
+\cite{sheng2024slora}, which shows that many adapters on one shared model
+is a practical way to deploy several skills.
+
+These methods mix adapters \emph{inside} the network, with weights that
+are learned and that change from token to token. This thesis takes a
+simpler, system-level approach: a separate, inspectable CPU router
+chooses \emph{one} whole adapter per step (the normalization expert, then
+one domain expert), so every decision can be logged, evaluated and
+corrected on its own. Because a learned mixture would be harder to
+inspect and to test component by component, the thesis instead compares
+routed experts with a single pooled adapter trained at equal compute.
+
+\subsection{Re-ranking and Hybrid Retrieval}\label{re-ranking-and-hybrid-retrieval}
+
+A retriever such as BM25 \cite{robertson2009bm25} or a dense encoder
+\cite{karpukhin2020dpr}, \cite{chen2024bgem3} returns candidates
+quickly, but its ranking is often imperfect. Re-ranking passes the top
+candidates to a stronger model that reads the question and each passage
+together. A BERT cross-encoder used in this way greatly improved passage
+ranking \cite{nogueira2019passage}, and the sequence-to-sequence ranker
+monoT5 was especially strong when training data were scarce and
+transferred zero-shot to other collections \cite{nogueira2020monot5}.
+ColBERT keeps much of this quality at far lower cost by comparing token
+embeddings late in the computation, and runs two orders of magnitude
+faster than BERT-based rankers \cite{khattab2020colbert}. Multilingual
+cross-encoders such as bge-reranker-v2-m3 make re-ranking available for
+Bangla \cite{bgereranker2024}. Rankings from several retrievers or
+several query formulations can also be fused with Reciprocal Rank Fusion
+\cite{cormack2009rrf}, as in RAG-Fusion \cite{rackauckas2024ragfusion}.
+When the right collection is uncertain, a router can choose between
+retrievers, as RouterRetriever does over a mixture of expert embedding
+models \cite{lee2025routerretriever}. Bangla QA work has used retrieval
+mainly with a single retriever \cite{banglamedqa}. This thesis chooses a
+retriever per domain on validation data, and its answer-time extension
+adds cross-encoder re-ranking and a search of a second knowledge base
+when the domain router is unsure (Chapter~4).
+
+\subsection{Grounding, Abstention and Dialect Robustness}\label{grounding-abstention-and-dialect-robustness}
+
+\hl{Grounding answers in retrieved evidence is the standard remedy for
+hallucination in knowledge-intensive tasks \cite{ji2023survey}, \cite{lewis2020rag}. Self-RAG
+and Adaptive-RAG decide when and how to retrieve \cite{jeong2024adaptiverag}, \cite{asai2024selfrag},
+SQuAD 2.0 and selective QA teach models to abstain \cite{rajpurkar2018squad2}, \cite{kamath2020selective},
+and BanglaRQA and NCTB-QA provide real unanswerable Bangla questions for
+learning this behaviour \cite{ekram2022banglarqa}, \cite{nctbqa}. For dialect robustness in
+English, Multi-VALUE generates synthetic dialect variants for evaluation
+and augmentation \cite{ziems2023multivalue}, and TADA trains a task-agnostic dialect
+adapter that aligns dialect and standard representations; its gains are
+larger for dialects far from the standard (+2.8 to +3.9 points) than for
+dialects close to it (+0.3 to +0.4) \cite{held2023tada}. What is missing is a
+system that treats uncertainty about the question itself, caused by
+dialect and routing errors, as well as uncertainty about the evidence.}
+
+{\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{@{}H{0.135\textwidth}H{0.195\textwidth}H{0.165\textwidth}H{0.195\textwidth}H{0.170\textwidth}@{}}
+\caption{Summary of the most closely related studies and the gap each leaves for this thesis.}\label{tab:related-studies}\\
+\toprule
+\textbf{Work} & \textbf{Task and data} & \textbf{Method} & \textbf{Key result} & \textbf{Gap} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Work} & \textbf{Task and data} & \textbf{Method} & \textbf{Key result} & \textbf{Gap} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Vashantor \cite{faria2023vashantor} & Dialect\ensuremath{\rightarrow}\allowbreak{}Standard translation and region detection; 5 regions, 12,500 pairs & BanglaT5, mT5; DialectBanglaT5/\allowbreak{}BERT (v2) & BLEU 44.03 (Ctg), 51.08 (Syl) with BanglaT5; 89.02\% region accuracy (v2) & Everyday sentences; no QA \\
+Kothon, ONUBAD, ChatgaiyyaAlap \cite{kothon2026}, \cite{sultana2025onubad}, \cite{chatgaiyyaalap2025} & Dialect--Standard parallel corpora & Dataset papers & Human-validated pairs & No downstream task \\
+5-Dialects-BN \cite{jawad2026fivedialects} & 6,000 utterances, 5 dialects, 5 aligned fields & 7 LLMs; prompting and LoRA & LoRA (160/\allowbreak{}dialect) 73.6 BLEU to English; some models below copy baseline & Normalization only prompted; no QA \\
+Bridging Dialects \cite{khandaker2024bridging} & Standard\ensuremath{\rightarrow}\allowbreak{}dialect on Vashantor & BanglaT5, mT5, mBART-50 & WER 0.71 (Ctg) vs 0.24 (Mym) & Reverse direction; no QA \\
+BanglaDialecto \cite{samin2024bangladialecto} & Noakhali speech standardization, 10 h & Whisper, BanglaT5, TTS & ASR CER 0.8\%; BLEU 41.6 & One dialect; no QA \\
+Bangla\allowbreak{}CHQ-Prantik \cite{prantik2025} & Health questions: 2,350 Sylheti, 500 Chittagonian & 4 LLMs, prompting & Best BLEU 23.67 (Syl, 5-shot) & Standard\ensuremath{\rightarrow}\allowbreak{}dialect; no fine-tuning; no QA \\
+Sylheti-CAP \cite{prama2025sylheticap} & Sylheti\ensuremath{\rightarrow}\allowbreak{}Standard, Vashantor test & Context-aware LLM prompting & Best chrF 53.72 & Prompting only; no QA \\
+RAG dialect MT \cite{sami2025comparative} & Standard\ensuremath{\rightarrow}\allowbreak{}dialect, 6 dialects & RAG few-shot, 10 LLMs & BLEU 5--12 without examples; Chittagong 9\ensuremath{\rightarrow}\allowbreak{}26 with sentence-pair retrieval & Translation only \\
+BanglaRQA \cite{ekram2022banglarqa} & Reading comprehension, 14,889 QA, 3,631 unanswerable & BanglaT5 and encoders & 62.42 EM, 78.11 F1 & Standard only; passage given \\
+NCTB-QA \cite{nctbqa} & Textbook QA, 87,805 pairs, 42.75\% unanswerable & BERT, RoBERTa, ELECTRA & BERT F1 0.150\ensuremath{\rightarrow}\allowbreak{}0.620 & Standard only; passage given; model-generated questions \\
+BEnQA, SOMAJGYAAN \cite{shafayat2024benqa}, \cite{shifa2025somajgyaan} & Bangla MCQ benchmarks & LLM prompting & Bangla below English; closed models lead & Standard only; multiple choice \\
+bn\_squad \cite{mayeesha2021bengaliqa} & SQuAD 2.0 translated to Bangla; small human-annotated Wikipedia QA set & mBERT, DistilBERT, RoBERTa & Established machine-vs-human (children) baseline gap & Translated data is noisy; no retrieval-augmented answering \\
+NCTB Multi-BERT QA \cite{khondoker2024unlocking} & NCTB passage QA, classes 6--10; about 3,000 pairs & BERT Base, Bangla-BERT, RoBERTa & Bangla-BERT F1 0.75, EM 0.53 & Passage given; Standard Bangla \\
+BanglaCQA \cite{azmary2026banglacqa} & Counterfactual contexts for BanglaRQA & BanglaT5, LLMs & Models follow the passage & No retrieval or dialects \\
+TigerLLM, TituLLMs \cite{raihan2025tigerllm}, \cite{titulm2025} & Bangla LLMs & Continued pre-training & Better than other open Bangla LLMs & No dialects; not compared after task fine-tuning \\
+AmarDoctor \cite{nahar2025amardoctor} & Triage app, 185 vignettes & Knowledge graph, dialect symptom lexicon & 81.08\% top-1 diagnostic precision & Lexicon coverage; not QA \\
+DocTalkBN \cite{saha2026doctalkbn} & Telemedicine corpus, 10,274 QA & LLM and encoder benchmarks & Triage macro-F1 0.463; safety F1 > 0.92 & No retrieval; no dialects \\
+Bangla\allowbreak{}CHQ-Summ \cite{khan2023banglachqsumm} & 2,350 real consumer health questions with human summaries & Fine-tuned BanglaT5 for summarization & ROUGE-L 48.35\% & Summarization only, not QA; no answers provided \\
+Bangla\-MedQA \cite{banglamedqa} & Bangla medical MCQ & 6 RAG strategies & 42.15\% \ensuremath{\rightarrow}\allowbreak{} 66.60\% with RAG & Standard only; MCQ \\
+\bottomrule
+\end{longtable}
+}
+
+\section{Summary of Findings and Research Gap}\label{summary-of-findings-and-research-gap}
+
+\begin{itemize}
+\item \hl{Regional varieties differ strongly from Standard Bangla, and
+Chittagonian and Sylheti are among the hardest to model in both
+translation directions \cite{jawad2026fivedialects}, \cite{faria2023vashantor}, \cite{khandaker2024bridging}, \cite{prantik2025}.}
+
+\item \hl{Parallel dialect data exist (Vashantor, Kothon, ONUBAD,
+ChatgaiyyaAlap, 5-Dialects-BN, BanglaCHQ-Prantik) and offer several
+thousand dialect--Standard pairs for each target dialect, but they are
+mostly everyday sentences, and medical dialect data are scarce,
+especially for Chittagonian \cite{faria2023vashantor}, \cite{jawad2026fivedialects}, \cite{prantik2025}.}
+
+\item \hl{Prompting is not enough for dialects: some LLMs fall below the
+copy-input baseline on normalization, and prompted Standard\ensuremath{\rightarrow}dialect
+translation of health questions reaches only modest BLEU \cite{jawad2026fivedialects},
+\cite{prantik2025}. Small amounts of supervised adaptation give large gains
+\cite{jawad2026fivedialects}, \cite{faria2023vashantor}.}
+
+\item \hl{Retrieval helps both dialect handling and domain QA: retrieved
+dialect--Standard pairs improve LLM dialect translation \cite{sami2025comparative}, and
+retrieval improves medical QA \cite{banglamedqa}, \cite{xiong2024medrag}.}
+
+\item \hl{Bangla QA benchmarks with unanswerable questions exist (BanglaRQA,
+NCTB-QA), but all Bangla QA benchmarks, including BEnQA and SOMAJGYAAN,
+are in Standard Bangla, and the earlier QA systems assume the correct
+passage is given \cite{ekram2022banglarqa}, \cite{nctbqa}, \cite{shafayat2024benqa}, \cite{shifa2025somajgyaan}.}
+
+\item \hl{LLMs are not as good as English on Bangla questions, and open
+source models are behind closed source models \cite{shafayat2024benqa}, \cite{shifa2025somajgyaan}.}
+
+\item \hl{Bangla-adapted LLMs exist \cite{raihan2025tigerllm}, \cite{titulm2025}, but their benefit
+over general multilingual models after task fine-tuning had not been
+measured under an equal budget.}
+
+\item \hl{Bangla healthcare AI ranges from knowledge-graph triage to
+telemedicine corpora \cite{nahar2025amardoctor}, \cite{saha2026doctalkbn}, \cite{khan2023banglachqsumm}; triage remains hard
+for LLMs, and consumer health text is informal and code-mixed \cite{khan2023nervous},
+so explicit safety rules and referral are needed.}
+
+\item \hl{In Bangladesh, students are already employing
+LLM\textquotesingle s in learning but the studied tools were in Standard
+Bangla or English and were used by university level learners \cite{hossain2025ailiteracy}.}
+
+\item \hl{When the passage contradicts pretraining knowledge, Bangla QA
+models largely follow the passage \cite{azmary2026banglacqa}, which supports grounding
+answers in retrieved evidence. The previous NCTB and Wikipedia QA
+systems were extractive and assumed that the passage was given \cite{mayeesha2021bengaliqa},
+\cite{khondoker2024unlocking}.}
+
+\item \hl{Parameter-efficient fine-tuning makes it possible to adapt one
+open base model to several tasks with small adapters on one GPU
+\cite{hu2022lora}, \cite{dettmers2023qlora}. This enables a modular architecture in which the
+same base model serves as the dialect expert and as the domain experts.}
+
+\item Dialect gaps are found across languages, and normalizing into the
+standard variety is an established strategy, but its effect on a
+downstream task such as question answering is rarely measured
+\cite{faisal2024dialectbench}, \cite{kantharuban2023dialectgap},
+\cite{honnet2018swissgerman}.
+
+\item Many LoRA adapters can share one base model and be served together
+\cite{sheng2024slora}. Existing methods mix them inside the network with
+learned weights \cite{wu2024mole}, \cite{huang2024lorahub}, while
+explicit, inspectable routing between whole adapters has received less
+attention.
+\end{itemize}
+
+\hl{Hence, this thesis topic, Dialect-Aware Bangla Question Answering
+with Routed Domain Experts and Retrieval-Augmented Generation for
+Healthcare and Education, targets three gaps which are yet to be
+resolved in previous studies, which are outlined below:}
+
+\begin{itemize}
+\item \hl{\textbf{Dialect-aware QA.} Dialect identification and
+normalization have been studied as end tasks, but not connected to
+retrieval and answering: no system lets a Chittagonian or Sylheti
+speaker ask a health or education question and receive a grounded
+answer.}
+
+\item \hl{\textbf{Grounded and safe answering in one pipeline.} Bangla QA
+and LLM studies have not combined domain routing, retrieval, abstention,
+clarification and medical safety rules in one evaluated system.}
+
+\item \hl{\textbf{Per-variety evaluation.} Existing Bangla QA results are
+reported only for Standard Bangla; the end-to-end gap between Standard
+and dialect users, and how much of it each component closes, has not
+been measured.}
+\end{itemize}

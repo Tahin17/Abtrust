@@ -1,0 +1,3 @@
+# Preserve the exact scientific-result bytes used by provenance checksums.
+reports/**/*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+reports/**/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

@@ -2,7 +2,7 @@
 
 This report measures selected methods empirically under the listed simulations. Simulations cannot prove a general statistical guarantee. In particular the original mSPRT inserts estimated variances into a known-variance likelihood ratio: its displayed sequential results are a WORKING-NORMAL APPROXIMATION, not an exact anytime-valid test. For exact assumptions see docs/methods.md. Columns ending in `mcse` are Monte Carlo standard errors of simulated rates.
 
-Generated 2026-10-18 16:56 UTC with Python 3.10.11, numpy 2.2.6. Reproduce with `abtrust validate` (add `--scale 0.1` for a quick run).
+Simulation results saved 2026-10-18 18:59 UTC with Python 3.10.11, numpy 2.2.6. Reproduce the full core suite with `abtrust validate`; use a separate `--out` directory for reduced-budget runs.
 
 ## Summary
 
@@ -31,7 +31,7 @@ Generated 2026-10-18 16:56 UTC with Python 3.10.11, numpy 2.2.6. Reproduce with 
 
 Target: false-positive rate 5%, coverage 95%. The revenue metric is zero-inflated lognormal (8% buyers, heavy right tail), the hardest case for a t-test.
 
-<sub>4,000 simulated experiments per cell · 18s</sub>
+<sub>4,000 simulated experiments per cell · 15s</sub>
 
 ### How does naive peeking compare with a working-normal mSPRT approximation?
 
@@ -79,7 +79,7 @@ Cost and benefit of each sequential procedure (100 looks):
 
 `mean_sample_fraction` is the average fraction of planned observations used before the named procedure first rejects. `simultaneous_coverage` is the fraction of simulations whose intervals cover the true effect at every look. The **working-normal** mSPRT is empirical ONLY and does not inherit a formal anytime-valid guarantee from these rates. The bounded Hoeffding result does have a time-uniform guarantee under its independent [0,1], stable-mean assumptions, but may be extremely conservative. `gaussian_known_sd` requires independent Gaussian outcomes with genuinely known SDs, equal arm sizes and prespecified tau.
 
-<sub>3,000 simulated experiments per cell · 91s</sub>
+<sub>3,000 simulated experiments per cell · 98s</sub>
 
 ### Does CUPED reduce variance as much as theory says, without inflating false positives?
 
@@ -107,7 +107,7 @@ Cost and benefit of each sequential procedure (100 looks):
 
 `lin_hc2` is regression adjustment with treatment interactions and HC2 robust SEs (Lin, 2013). `reported_se_over_empirical_sd` close to 1 means each method's reported SE is honest.
 
-<sub>3,000 simulated experiments per cell · 56s</sub>
+<sub>3,000 simulated experiments per cell · 58s</sub>
 
 ### What happens if a ratio metric is analysed per event instead of per user?
 
@@ -128,7 +128,7 @@ Cost and benefit of each sequential procedure (100 looks):
 | 0.20 | naive per-session | 21.80% | 77.97% | 0.623 |
 | 0.20 | delta method | 5.13% | 94.73% | 0.623 |
 
-<sub>3,000 simulated experiments per cell · 46s</sub>
+<sub>3,000 simulated experiments per cell · 44s</sub>
 
 ### How sensitive is the SRM check, and how often does it false-alarm?
 
@@ -193,4 +193,4 @@ The first row (true 50/50 split) is the false-alarm rate; the target is the 0.1%
 
 `fwer` = probability of at least one false positive; `fdr` = average share of false positives among rejections; `power` = share of real effects detected. Holm controls FWER, while BH controls FDR under its standard dependence assumptions; in this ALL-NULL scenario FDR = FWER. For this simulation; values slightly above 5% sit within about 1.5 Monte Carlo standard errors (roughly 0.5 points at 2,000 simulations) - note the single-metric row, where no correction is applied at all, shows the same excess, so it comes from the simulation draw.
 
-<sub>2,000 simulated experiments per cell · 65s</sub>
+<sub>2,000 simulated experiments per cell · 64s</sub>

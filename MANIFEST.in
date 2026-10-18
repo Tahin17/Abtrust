@@ -1,0 +1,13 @@
+include LICENSE README.md CHANGELOG-v0.2.md CHANGELOG-v0.3.md
+include abtrust-run-guide.md abtrust-run-guide-v0.2.md abtrust-run-guide-v0.3.md
+recursive-include app *.py
+recursive-include scripts *.py
+recursive-include docs *.md
+recursive-include tests *.py
+include data/sample_experiment.csv
+exclude data/hillstrom.csv
+include requirements-verified-windows.txt
+include .gitattributes
+recursive-include reports *.md *.json *.csv *.png
+global-exclude __pycache__ *.py[cod]
+exclude reports/verification/distribution.json

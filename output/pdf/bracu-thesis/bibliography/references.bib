@@ -1,0 +1,1096 @@
+% refs_verified.bib -- IEEEtran-compatible, UTF-8 (accents given as LaTeX escapes)
+% Verified 2026-09-29 against ACL Anthology, PMLR, NeurIPS proceedings, Nature,
+% ScienceDirect, Hugging Face paper/model pages, and IR Anthology records.
+
+% ---------------------------------------------------------------- PEFT / LLMs
+@inproceedings{hu2022lora,
+  author    = {Hu, Edward J. and Shen, Yelong and Wallis, Phillip and Allen-Zhu, Zeyuan and Li, Yuanzhi and Wang, Shean and Wang, Lu and Chen, Weizhu},
+  title     = {{LoRA}: Low-Rank Adaptation of Large Language Models},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2022},
+  url       = {https://openreview.net/forum?id=nZeVKeeFYf9},
+  note      = {arXiv:2106.09685}
+}
+
+@inproceedings{dettmers2023qlora,
+  author    = {Dettmers, Tim and Pagnoni, Artidoro and Holtzman, Ari and Zettlemoyer, Luke},
+  title     = {{QLoRA}: Efficient Finetuning of Quantized {LLMs}},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {36},
+  pages     = {10088--10115},
+  year      = {2023},
+  doi       = {10.52202/075280-0441},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/2023/hash/1feb87871436031bdc0f2beaa62a049b-Abstract-Conference.html}
+}
+
+@inproceedings{houlsby2019adapters,
+  author    = {Houlsby, Neil and Giurgiu, Andrei and Jastrzebski, Stanislaw and Morrone, Bruna and De Laroussilhe, Quentin and Gesmundo, Andrea and Attariyan, Mona and Gelly, Sylvain},
+  title     = {Parameter-Efficient Transfer Learning for {NLP}},
+  booktitle = {Proc. 36th Int. Conf. Machine Learning (ICML)},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {97},
+  pages     = {2790--2799},
+  publisher = {PMLR},
+  year      = {2019},
+  url       = {https://proceedings.mlr.press/v97/houlsby19a.html}
+}
+
+@inproceedings{shazeer2017moe,
+  author    = {Shazeer, Noam and Mirhoseini, Azalia and Maziarz, Krzysztof and Davis, Andy and Le, Quoc and Hinton, Geoffrey and Dean, Jeff},
+  title     = {Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2017},
+  url       = {https://openreview.net/forum?id=B1ckMDqlg},
+  note      = {arXiv:1701.06538}
+}
+
+@inproceedings{holtzman2020degeneration,
+  author    = {Holtzman, Ari and Buys, Jan and Du, Li and Forbes, Maxwell and Choi, Yejin},
+  title     = {The Curious Case of Neural Text Degeneration},
+  booktitle = {Proc. Int. Conf. Learning Representations (ICLR)},
+  year      = {2020},
+  url       = {https://openreview.net/forum?id=rygGQyrFvH},
+  note      = {arXiv:1904.09751}
+}
+
+@article{gemma4,
+  author       = {{Gemma Team}},
+  title        = {Gemma 4 Technical Report},
+  journal     = {arXiv preprint arXiv:2607.02770},
+  year         = {2026},
+  url          = {https://arxiv.org/abs/2607.02770},
+  note         = {Model card: https://huggingface.co/google/gemma-4-E4B-it}
+}
+
+@article{gemma3,
+  author       = {{Gemma Team}},
+  title        = {Gemma 3 Technical Report},
+  journal     = {arXiv preprint arXiv:2503.19786},
+  year         = {2025},
+  url          = {https://arxiv.org/abs/2503.19786}
+}
+
+@article{qwen3,
+  author       = {Yang, An and Li, Anfeng and Yang, Baosong and others},
+  title        = {Qwen3 Technical Report},
+  journal     = {arXiv preprint arXiv:2505.09388},
+  year         = {2025},
+  url          = {https://arxiv.org/abs/2505.09388}
+}
+
+@article{llama3,
+  author       = {Grattafiori, Aaron and Dubey, Abhimanyu and others},
+  title        = {The {Llama} 3 Herd of Models},
+  journal     = {arXiv preprint arXiv:2407.21783},
+  year         = {2024},
+  url          = {https://arxiv.org/abs/2407.21783}
+}
+
+@article{tinyaya,
+  author       = {Salamanca, Alejandro R. and Abagyan, Diana and D'souza, Daniel and Khairi, Ammar and Mora, David and Dash, Saurabh and Aryabumi, Viraat and Rajaee, Sara and Mofakhami, Mehrnaz and Sahu, Ananya and Euyang, Thomas and Prince, Brittawnya and Smith, Madeline and Lin, Hangyu and Locatelli, Acyr and Hooker, Sara and Kocmi, Tom and Gomez, Aidan and Zhang, Ivan and Blunsom, Phil and Frosst, Nick and Pineau, Joelle and Ermis, Beyza and {\"U}st{\"u}n, Ahmet and Kreutzer, Julia and Fadaee, Marzieh},
+  title        = {Tiny {Aya}: Bridging Scale and Multilingual Depth},
+  journal     = {arXiv preprint arXiv:2603.11510},
+  year         = {2026},
+  url          = {https://arxiv.org/abs/2603.11510},
+  note         = {Model card: https://huggingface.co/CohereLabs/tiny-aya-fire}
+}
+
+% ---------------------------------------------------------------- Bangla LMs / datasets
+@inproceedings{bhattacharjee2022banglabert,
+  author    = {Bhattacharjee, Abhik and Hasan, Tahmid and Ahmad, Wasi and Mubasshir, Kazi Samin and Islam, Md Saiful and Iqbal, Anindya and Rahman, M. Sohel and Shahriyar, Rifat},
+  title     = {{BanglaBERT}: Language Model Pretraining and Benchmarks for Low-Resource Language Understanding Evaluation in {Bangla}},
+  booktitle = {Findings of the Association for Computational Linguistics: NAACL 2022},
+  address   = {Seattle, United States},
+  publisher = {Association for Computational Linguistics},
+  month     = jul,
+  year      = {2022},
+  pages     = {1318--1327},
+  doi       = {10.18653/v1/2022.findings-naacl.98},
+  url       = {https://aclanthology.org/2022.findings-naacl.98/}
+}
+
+@inproceedings{raihan2025tigerllm,
+  author    = {Raihan, Nishat and Zampieri, Marcos},
+  title     = {{TigerLLM} -- A Family of {Bangla} Large Language Models},
+  booktitle = {Proc. 63rd Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)},
+  address   = {Vienna, Austria},
+  publisher = {Association for Computational Linguistics},
+  month     = jul,
+  year      = {2025},
+  pages     = {887--896},
+  doi       = {10.18653/v1/2025.acl-short.69},
+  url       = {https://aclanthology.org/2025.acl-short.69/}
+}
+
+@inproceedings{titulm2025,
+  author    = {Nahin, Shahriar Kabir and Nandi, Rabindra Nath and Sarker, Sagor and Muhtaseem, Quazi Sarwar and Kowsher, Md and Shill, Apu Chandraw and Ibrahim, Md and Menon, Mehadi Hasan and Al Muntasir, Tareq and Alam, Firoj},
+  title     = {{TituLLMs}: A Family of {Bangla} {LLMs} with Comprehensive Benchmarking},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2025},
+  address   = {Vienna, Austria},
+  publisher = {Association for Computational Linguistics},
+  month     = jul,
+  year      = {2025},
+  pages     = {24922--24940},
+  doi       = {10.18653/v1/2025.findings-acl.1279},
+  url       = {https://aclanthology.org/2025.findings-acl.1279/}
+}
+
+@inproceedings{ekram2022banglarqa,
+  author    = {Ekram, Syed Mohammed Sartaj and Rahman, Adham Arik and Altaf, Md. Sajid and Islam, Mohammed Saidul and Rahman, Mehrab Mustafy and Rahman, Md Mezbaur and Hossain, Md Azam and Kamal, Abu Raihan Mostofa},
+  title     = {{BanglaRQA}: A Benchmark Dataset for Under-resourced {Bangla} Language Reading Comprehension-based Question Answering with Diverse Question-Answer Types},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2022},
+  address   = {Abu Dhabi, United Arab Emirates},
+  publisher = {Association for Computational Linguistics},
+  month     = dec,
+  year      = {2022},
+  pages     = {2518--2532},
+  doi       = {10.18653/v1/2022.findings-emnlp.186},
+  url       = {https://aclanthology.org/2022.findings-emnlp.186/}
+}
+
+@article{nctbqa,
+  author       = {Eyasir, Abrar and Ahmed, Tahsin and Ibrahim, Muhammad},
+  title        = {{NCTB-QA}: A Large-Scale {Bangla} Educational Question Answering Dataset and Benchmarking Performance},
+  journal     = {arXiv preprint arXiv:2603.05462},
+  year         = {2026},
+  url          = {https://arxiv.org/abs/2603.05462}
+}
+
+@inproceedings{shafayat2024benqa,
+  author    = {Shafayat, Sheikh and Hasan, H M Quamran and Mahim, Minhajur Rahman Chowdhury and Putri, Rifki Afina and Thorne, James and Oh, Alice},
+  title     = {{BEnQA}: A Question Answering Benchmark for {Bengali} and {English}},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2024},
+  address   = {Bangkok, Thailand},
+  publisher = {Association for Computational Linguistics},
+  month     = aug,
+  year      = {2024},
+  pages     = {1158--1177},
+  doi       = {10.18653/v1/2024.findings-acl.68},
+  url       = {https://aclanthology.org/2024.findings-acl.68/}
+}
+
+@inproceedings{khan2023banglachqsumm,
+  author    = {Khan, Alvi and Kamal, Fida and Chowdhury, Mohammad Abrar and Ahmed, Tasnim and Laskar, Md Tahmid Rahman and Ahmed, Sabbir},
+  title     = {{BanglaCHQ-Summ}: An Abstractive Summarization Dataset for Medical Queries in {Bangla} Conversational Speech},
+  booktitle = {Proc. First Workshop on Bangla Language Processing (BLP-2023)},
+  address   = {Singapore},
+  publisher = {Association for Computational Linguistics},
+  month     = dec,
+  year      = {2023},
+  pages     = {85--93},
+  doi       = {10.18653/v1/2023.banglalp-1.10},
+  url       = {https://aclanthology.org/2023.banglalp-1.10/}
+}
+
+@inproceedings{prantik2025,
+  author    = {Mahjabin, Nowshin and Ruhan, Ahmed Shafin and Chowdhury, Mehreen Hossain and Fahim, Md and Hossain, Md. Azam},
+  title     = {Human--{LLM} Benchmarks for {Bangla} Dialect Translation: {Sylheti} and {Chittagonian} on the {BanglaCHQ-Summ} Corpus},
+  booktitle = {Proc. Second Workshop on Bangla Language Processing (BLP-2025)},
+  address   = {Mumbai, India},
+  publisher = {Association for Computational Linguistics},
+  month     = dec,
+  year      = {2025},
+  pages     = {223--236},
+  doi       = {10.18653/v1/2025.banglalp-1.18},
+  url       = {https://aclanthology.org/2025.banglalp-1.18/}
+}
+
+@article{faria2023vashantor,
+  author       = {Faria, Fatema Tuj Johora and Moin, Mukaffi Bin and Wase, Ahmed Al and Ahmmed, Mehidi and Sani, Md. Rabius and Muhammad, Tashreef},
+  title        = {{Vashantor}: A Large-scale Multilingual Benchmark Dataset for Automated Translation of {Bangla} Regional Dialects to {Bangla} Language},
+  journal     = {arXiv preprint arXiv:2311.11142},
+  year         = {2023},
+  url          = {https://arxiv.org/abs/2311.11142}
+}
+
+@article{kothon2026,
+  author  = {Faisal, Md. Atique and Sadaf, Farhan and Chowdhury, Dipta and Azrof, H. M. and Tanmay, Monojit Paul},
+  title   = {Kothon: A large-scale dataset for machine translation of the {Chittagonian} and {Sylheti} dialects into standard {Bangla}},
+  journal = {Data in Brief},
+  volume  = {66},
+  pages   = {112789},
+  year    = {2026},
+  doi     = {10.1016/j.dib.2026.112789},
+  url     = {https://www.sciencedirect.com/science/article/pii/S2352340926003422}
+}
+
+@article{sultana2025onubad,
+  author  = {Sultana, Nusrat and Yasmin, Rumana and Mallik, Bijon and Uddin, Mohammad Shorif},
+  title   = {{ONUBAD}: A comprehensive dataset for automated conversion of {Bangla} regional dialects into standard {Bengali} dialect},
+  journal = {Data in Brief},
+  volume  = {58},
+  pages   = {111276},
+  year    = {2025},
+  doi     = {10.1016/j.dib.2025.111276},
+  url     = {https://www.sciencedirect.com/science/article/pii/S2352340925000083}
+}
+
+@article{chatgaiyyaalap2025,
+  author  = {Chowdhury, Sinthia and Remal, Deawan Rakin Ahamed and Pasha, Syed Tangim and Islam, Ashraful and Noori, Sheak Rashed Haider},
+  title   = {{ChatgaiyyaAlap}: A dataset for conversion from {Chittagonian} dialect to standard {Bangla}},
+  journal = {Data in Brief},
+  volume  = {59},
+  pages   = {111413},
+  year    = {2025},
+  doi     = {10.1016/j.dib.2025.111413},
+  url     = {https://www.sciencedirect.com/science/article/pii/S2352340925001453}
+}
+
+% ---------------------------------------------------------------- Medical
+@article{nahar2025amardoctor,
+  author       = {Nahar, Nazmun and Ruparel, Ritesh Harshad and Kabir, Shariar and Khan, Sumaiya Tasnia and Saha, Shyamasree and Rashid, Mamunur},
+  title        = {{AmarDoctor}: An {AI}-Driven, Multilingual, Voice-Interactive Digital Health Application for Primary Care Triage and Patient Management to Bridge the Digital Health Divide for {Bengali} Speakers},
+  journal     = {arXiv preprint arXiv:2510.24724},
+  year         = {2025},
+  url          = {https://arxiv.org/abs/2510.24724}
+}
+
+@article{singhal2023medpalm,
+  author  = {Singhal, Karan and Azizi, Shekoofeh and Tu, Tao and Mahdavi, S. Sara and Wei, Jason and Chung, Hyung Won and Scales, Nathan and Tanwani, Ajay and Cole-Lewis, Heather and Pfohl, Stephen and Payne, Perry and Seneviratne, Martin and Gamble, Paul and Kelly, Chris and Babiker, Abubakr and Sch{\"a}rli, Nathanael and Chowdhery, Aakanksha and Mansfield, Philip and Demner-Fushman, Dina and Ag{\"u}era y Arcas, Blaise and Webster, Dale and Corrado, Greg S. and Matias, Yossi and Chou, Katherine and Gottweis, Juraj and Tomasev, Nenad and Liu, Yun and Rajkomar, Alvin and Barral, Joelle and Semturs, Christopher and Karthikesalingam, Alan and Natarajan, Vivek},
+  title   = {Large language models encode clinical knowledge},
+  journal = {Nature},
+  volume  = {620},
+  number  = {7972},
+  pages   = {172--180},
+  year    = {2023},
+  doi     = {10.1038/s41586-023-06291-2},
+  url     = {https://www.nature.com/articles/s41586-023-06291-2}
+}
+
+@article{banglamedqa,
+  author       = {Sultana, Sadia and Muna, Saiyma Sittul and Samarukh, Mosammat Zannatul and Abrar, Ajwad and Chowdhury, Tareque Mohmud},
+  title        = {{BanglaMedQA} and {BanglaMMedBench}: Evaluating Retrieval-Augmented Generation Strategies for {Bangla} Biomedical Question Answering},
+  journal     = {arXiv preprint arXiv:2511.04560},
+  year         = {2025},
+  url          = {https://arxiv.org/abs/2511.04560},
+  note         = {Dataset: https://huggingface.co/datasets/ajwad-abrar/BanglaMedQA}
+}
+
+% ---------------------------------------------------------------- Retrieval / RAG
+@article{robertson2009bm25,
+  author  = {Robertson, Stephen E. and Zaragoza, Hugo},
+  title   = {The Probabilistic Relevance Framework: {BM25} and Beyond},
+  journal = {Foundations and Trends in Information Retrieval},
+  volume  = {3},
+  number  = {4},
+  pages   = {333--389},
+  year    = {2009},
+  doi     = {10.1561/1500000019}
+}
+
+@inproceedings{cormack2009rrf,
+  author    = {Cormack, Gordon V. and Clarke, Charles L. A. and Buettcher, Stefan},
+  title     = {Reciprocal Rank Fusion Outperforms {Condorcet} and Individual Rank Learning Methods},
+  booktitle = {Proc. 32nd Int. ACM SIGIR Conf. Research and Development in Information Retrieval (SIGIR '09)},
+  address   = {New York, NY, USA},
+  publisher = {ACM},
+  pages     = {758--759},
+  year      = {2009},
+  doi       = {10.1145/1571941.1572114}
+}
+
+@inproceedings{chen2024bgem3,
+  author    = {Chen, Jianlyu and Xiao, Shitao and Zhang, Peitian and Luo, Kun and Lian, Defu and Liu, Zheng},
+  title     = {{M3-Embedding}: Multi-Linguality, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2024},
+  address   = {Bangkok, Thailand},
+  publisher = {Association for Computational Linguistics},
+  month     = aug,
+  year      = {2024},
+  pages     = {2318--2335},
+  doi       = {10.18653/v1/2024.findings-acl.137},
+  url       = {https://aclanthology.org/2024.findings-acl.137/}
+}
+
+@article{wang2024me5,
+  author       = {Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+  title        = {Multilingual {E5} Text Embeddings: A Technical Report},
+  journal     = {arXiv preprint arXiv:2402.05672},
+  year         = {2024},
+  url          = {https://arxiv.org/abs/2402.05672}
+}
+
+@inproceedings{karpukhin2020dpr,
+  author    = {Karpukhin, Vladimir and Oguz, Barlas and Min, Sewon and Lewis, Patrick and Wu, Ledell and Edunov, Sergey and Chen, Danqi and Yih, Wen-tau},
+  title     = {Dense Passage Retrieval for Open-Domain Question Answering},
+  booktitle = {Proc. 2020 Conf. Empirical Methods in Natural Language Processing (EMNLP)},
+  address   = {Online},
+  publisher = {Association for Computational Linguistics},
+  month     = nov,
+  year      = {2020},
+  pages     = {6769--6781},
+  doi       = {10.18653/v1/2020.emnlp-main.550},
+  url       = {https://aclanthology.org/2020.emnlp-main.550/}
+}
+
+@inproceedings{lewis2020rag,
+  author    = {Lewis, Patrick and Perez, Ethan and Piktus, Aleksandra and Petroni, Fabio and Karpukhin, Vladimir and Goyal, Naman and K{\"u}ttler, Heinrich and Lewis, Mike and Yih, Wen-tau and Rockt{\"a}schel, Tim and Riedel, Sebastian and Kiela, Douwe},
+  title     = {Retrieval-Augmented Generation for Knowledge-Intensive {NLP} Tasks},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {33},
+  pages     = {9459--9474},
+  year      = {2020},
+  url       = {https://proceedings.neurips.cc/paper/2020/hash/6b493230205f780e1bc26945df7481e5-Abstract.html}
+}
+
+@inproceedings{rajpurkar2018squad2,
+  author    = {Rajpurkar, Pranav and Jia, Robin and Liang, Percy},
+  title     = {Know What You Don't Know: Unanswerable Questions for {SQuAD}},
+  booktitle = {Proc. 56th Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)},
+  address   = {Melbourne, Australia},
+  publisher = {Association for Computational Linguistics},
+  month     = jul,
+  year      = {2018},
+  pages     = {784--789},
+  doi       = {10.18653/v1/P18-2124},
+  url       = {https://aclanthology.org/P18-2124/}
+}
+
+% ---------------------------------------------------------------- Evaluation metrics
+@inproceedings{papineni2002bleu,
+  author    = {Papineni, Kishore and Roukos, Salim and Ward, Todd and Zhu, Wei-Jing},
+  title     = {{BLEU}: A Method for Automatic Evaluation of Machine Translation},
+  booktitle = {Proc. 40th Annual Meeting of the Association for Computational Linguistics},
+  address   = {Philadelphia, Pennsylvania, USA},
+  publisher = {Association for Computational Linguistics},
+  month     = jul,
+  year      = {2002},
+  pages     = {311--318},
+  doi       = {10.3115/1073083.1073135},
+  url       = {https://aclanthology.org/P02-1040/}
+}
+
+@inproceedings{lin2004rouge,
+  author    = {Lin, Chin-Yew},
+  title     = {{ROUGE}: A Package for Automatic Evaluation of Summaries},
+  booktitle = {Text Summarization Branches Out},
+  address   = {Barcelona, Spain},
+  publisher = {Association for Computational Linguistics},
+  month     = jul,
+  year      = {2004},
+  pages     = {74--81},
+  url       = {https://aclanthology.org/W04-1013/}
+}
+
+@inproceedings{banerjee2005meteor,
+  author    = {Banerjee, Satanjeev and Lavie, Alon},
+  title     = {{METEOR}: An Automatic Metric for {MT} Evaluation with Improved Correlation with Human Judgments},
+  booktitle = {Proc. ACL Workshop on Intrinsic and Extrinsic Evaluation Measures for Machine Translation and/or Summarization},
+  address   = {Ann Arbor, Michigan},
+  publisher = {Association for Computational Linguistics},
+  month     = jun,
+  year      = {2005},
+  pages     = {65--72},
+  url       = {https://aclanthology.org/W05-0909/}
+}
+
+@inproceedings{popovic2015chrf,
+  author    = {Popovi{\'c}, Maja},
+  title     = {{chrF}: character n-gram {F}-score for automatic {MT} evaluation},
+  booktitle = {Proc. Tenth Workshop on Statistical Machine Translation},
+  address   = {Lisbon, Portugal},
+  publisher = {Association for Computational Linguistics},
+  month     = sep,
+  year      = {2015},
+  pages     = {392--395},
+  doi       = {10.18653/v1/W15-3049},
+  url       = {https://aclanthology.org/W15-3049/}
+}
+
+@inproceedings{popovic2017chrfpp,
+  author    = {Popovi{\'c}, Maja},
+  title     = {{chrF++}: words helping character n-grams},
+  booktitle = {Proc. Second Conference on Machine Translation},
+  address   = {Copenhagen, Denmark},
+  publisher = {Association for Computational Linguistics},
+  month     = sep,
+  year      = {2017},
+  pages     = {612--618},
+  doi       = {10.18653/v1/W17-4770},
+  url       = {https://aclanthology.org/W17-4770/}
+}
+
+@inproceedings{post2018sacrebleu,
+  author    = {Post, Matt},
+  title     = {A Call for Clarity in Reporting {BLEU} Scores},
+  booktitle = {Proc. Third Conference on Machine Translation: Research Papers},
+  address   = {Brussels, Belgium},
+  publisher = {Association for Computational Linguistics},
+  month     = oct,
+  year      = {2018},
+  pages     = {186--191},
+  doi       = {10.18653/v1/W18-6319},
+  url       = {https://aclanthology.org/W18-6319/}
+}
+
+% ---------------------------------------------------------------- Significance testing
+@inproceedings{koehn2004bootstrap,
+  author    = {Koehn, Philipp},
+  title     = {Statistical Significance Tests for Machine Translation Evaluation},
+  booktitle = {Proc. 2004 Conf. Empirical Methods in Natural Language Processing (EMNLP)},
+  address   = {Barcelona, Spain},
+  publisher = {Association for Computational Linguistics},
+  month     = jul,
+  year      = {2004},
+  pages     = {388--395},
+  url       = {https://aclanthology.org/W04-3250/}
+}
+
+@inproceedings{riezler2005randomization,
+  author    = {Riezler, Stefan and Maxwell, John T.},
+  title     = {On Some Pitfalls in Automatic Evaluation and Significance Testing for {MT}},
+  booktitle = {Proc. ACL Workshop on Intrinsic and Extrinsic Evaluation Measures for Machine Translation and/or Summarization},
+  address   = {Ann Arbor, Michigan},
+  publisher = {Association for Computational Linguistics},
+  month     = jun,
+  year      = {2005},
+  pages     = {57--64},
+  url       = {https://aclanthology.org/W05-0908/}
+}
+
+@article{holm1979,
+  author  = {Holm, Sture},
+  title   = {A Simple Sequentially Rejective Multiple Test Procedure},
+  journal = {Scandinavian Journal of Statistics},
+  volume  = {6},
+  number  = {2},
+  pages   = {65--70},
+  year    = {1979},
+  url     = {https://www.jstor.org/stable/4615733}
+}
+
+% ---------------------------------------------------------------- added for Chapters 1, 2 and 6
+@inproceedings{asai2024selfrag,
+  author    = {Asai, Akari and Wu, Zeqiu and Wang, Yizhong and Sil, Avirup and Hajishirzi, Hannaneh},
+  title     = {{Self-RAG}: Learning to Retrieve, Generate, and Critique through Self-Reflection},
+  booktitle = {Proc. Int. Conf. Learn. Represent. (ICLR)},
+  year      = {2024},
+  url       = {https://openreview.net/forum?id=hSyW5go0v8}
+}
+
+@article{aurpa2026banglameder,
+  author  = {Aurpa, Tanjim Taharat and Akter, Farzana and Hasan, Md. Mehedi and Ahmed, Shakil and Rafiq, Shifat Ara and Khan, Fatema and Sheikh, Rubel},
+  title   = {{Bangla MedER}: Multi-{BERT} ensemble approach for the recognition of {Bangla} medical entity},
+  journal = {PLOS ONE},
+  volume  = {21},
+  number  = {2},
+  pages   = {e0342558},
+  year    = {2026},
+  doi     = {10.1371/journal.pone.0342558},
+  note    = {Preprint: arXiv:2512.17769}
+}
+
+@article{azmary2026banglacqa,
+  title  = {Understanding {QA} generation: Extracting Parametric and Contextual Knowledge with {CQA} for Low Resource {B}angla Language},
+  author = {Azmary, Umme Abira and Kayes, MD Ikramul and Shatabda, Swakkhar and Sadeque, Farig Yousuf},
+  year   = {2026}, journal     = {arXiv preprint arXiv:2602.01451},
+  url    = {https://arxiv.org/abs/2602.01451}
+}
+
+@inproceedings{bhattacharjee2023banglanlg,
+  title     = "{B}angla{NLG} and {B}angla{T}5: Benchmarks and Resources for Evaluating Low-Resource Natural Language Generation in {B}angla",
+  author    = "Bhattacharjee, Abhik and Hasan, Tahmid and Ahmad, Wasi Uddin and Shahriyar, Rifat",
+  booktitle = "Findings of the Association for Computational Linguistics: EACL 2023",
+  month = may, year = "2023", address = "Dubrovnik, Croatia",
+  publisher = "Association for Computational Linguistics",
+  pages = "726--735", doi = "10.18653/v1/2023.findings-eacl.54",
+  url = "https://aclanthology.org/2023.findings-eacl.54/"
+}
+
+@article{farzana2026semantic,
+  author        = {Farzana, Meherun and Joarder, Aniket and Hasan, Mahmudul and Khan, Md. Mosaddek},
+  title         = {Semantic Grading of Written Answers in Low-Resource Language {Bangla} Using a Fine-Tuned Lightweight Language Model},
+  year          = {2026},
+  journal     = {arXiv preprint arXiv:2606.11931},
+}
+
+@article{fedus2022switch,
+  author    = {Fedus, William and Zoph, Barret and Shazeer, Noam},
+  title     = {Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity},
+  journal   = {J. Mach. Learn. Res.},
+  volume    = {23},
+  number    = {120},
+  pages     = {1--39},
+  year      = {2022},
+  url       = {https://jmlr.org/papers/v23/21-0998.html}
+}
+
+@article{hossain2025ailiteracy,
+  author        = {Hossain, Shahin and Khanam, Shapla and Haniya, Samaa and Nasr, Nesma Ragab},
+  title         = {{AI} Literacy and {LLM} Engagement in Higher Education: A Cross-National Quantitative Study},
+  year          = {2025},
+  journal     = {arXiv preprint arXiv:2507.03020},
+}
+
+@article{jacobs1991adaptive,
+  author    = {Jacobs, Robert A. and Jordan, Michael I. and Nowlan, Steven J. and Hinton, Geoffrey E.},
+  title     = {Adaptive Mixtures of Local Experts},
+  journal   = {Neural Comput.},
+  volume    = {3},
+  number    = {1},
+  pages     = {79--87},
+  year      = {1991},
+  doi       = {10.1162/neco.1991.3.1.79}
+}
+
+@article{jawad2026fivedialects,
+  author = {Jawad, Md Mahir and Jim, Galib Mahmud and Ahmed, Rafid and Hossain, Mir Sazzat and Fahim, Md and Bhuiyan, Md Farhad Alam},
+  title  = {{5-Dialects-BN}: Unmasking the Impact of Transliteration on {Bangla} Dialectal {LLMs}},
+  year   = {2026},
+  journal     = {arXiv preprint arXiv:2609.09964},
+  url    = {https://arxiv.org/abs/2609.09964}
+}
+
+@inproceedings{jeong2024adaptiverag,
+  author    = {Jeong, Soyeong and Baek, Jinheon and Cho, Sukmin and Hwang, Sung Ju and Park, Jong C.},
+  title     = {Adaptive-{RAG}: Learning to Adapt Retrieval-Augmented Large Language Models through Question Complexity},
+  booktitle = {Proc. 2024 Conf. North Amer. Chapter Assoc. Comput. Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+  address   = {Mexico City, Mexico},
+  pages     = {7036--7050},
+  year      = {2024},
+  doi       = {10.18653/v1/2024.naacl-long.389}
+}
+
+@article{ji2023survey,
+  author    = {Ji, Ziwei and Lee, Nayeon and Frieske, Rita and Yu, Tiezheng and Su, Dan and Xu, Yan and Ishii, Etsuko and Bang, Ye Jin and Madotto, Andrea and Fung, Pascale},
+  title     = {Survey of Hallucination in Natural Language Generation},
+  journal   = {ACM Comput. Surv.},
+  volume    = {55},
+  number    = {12},
+  pages     = {248:1--248:38},
+  year      = {2023},
+  doi       = {10.1145/3571730}
+}
+
+@inproceedings{joshi2020state,
+  author    = {Joshi, Pratik and Santy, Sebastin and Budhiraja, Amar and Bali, Kalika and Choudhury, Monojit},
+  title     = {The State and Fate of Linguistic Diversity and Inclusion in the {NLP} World},
+  booktitle = {Proc. 58th Annu. Meeting Assoc. Comput. Linguistics (ACL)},
+  address   = {Online},
+  pages     = {6282--6293},
+  year      = {2020},
+  doi       = {10.18653/v1/2020.acl-main.560}
+}
+
+@article{kabir2024asr,
+  author = {Kabir, Shariar and Nahar, Nazmun and Saha, Shyamasree and Rashid, Mamunur},
+  title  = {Automatic Speech Recognition for Biomedical Data in {Bengali} Language},
+  year   = {2024},
+  journal     = {arXiv preprint arXiv:2406.12931},
+  url    = {https://arxiv.org/abs/2406.12931}
+}
+
+@inproceedings{kamath2020selective,
+  author    = {Kamath, Amita and Jia, Robin and Liang, Percy},
+  title     = {Selective Question Answering under Domain Shift},
+  booktitle = {Proc. 58th Annu. Meeting Assoc. Comput. Linguistics (ACL)},
+  address   = {Online},
+  pages     = {5684--5696},
+  year      = {2020},
+  doi       = {10.18653/v1/2020.acl-main.503}
+}
+
+@inproceedings{khan2023nervous,
+  author    = {Khan, Alvi Aveen and Kamal, Fida and Nower, Nuzhat and Ahmed, Tasnim and Ahmed, Sabbir and Chowdhury, Tareque Mohmud},
+  title     = {{NERvous} About My Health: Constructing a {Bengali} Medical Named Entity Recognition Dataset},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2023},
+  month     = dec,
+  year      = {2023},
+  address   = {Singapore},
+  publisher = {Association for Computational Linguistics},
+  pages     = {5768--5774},
+  doi       = {10.18653/v1/2023.findings-emnlp.383}
+}
+
+@inproceedings{khandaker2024bridging,
+  author    = {Khandaker, Md. Arafat Alam and Raha, Ziyan Shirin and Paul, Bidyarthi and Muhammad, Tashreef},
+  title     = {Bridging Dialects: Translating Standard {Bangla} to Regional Variants Using Neural Models},
+  booktitle = {Proc. 27th International Conference on Computer and Information Technology (ICCIT)},
+  address   = {Cox's Bazar, Bangladesh},
+  year      = {2024}, pages = {885--890},
+  doi       = {10.1109/ICCIT64611.2024.11022371}
+}
+
+@article{khondoker2024unlocking,
+  title  = {Unlocking the Potential of Multiple {BERT} Models for {B}angla Question Answering in {NCTB} Textbooks},
+  author = {Khondoker, Abdullah and Taufik, Enam Ahmed and Tashik, Md Iftekhar Islam and Mahmud, S M Ishtiak and Parsa, Antara Firoz},
+  year   = {2024}, journal     = {arXiv preprint arXiv:2412.18440},
+  url    = {https://arxiv.org/abs/2412.18440}
+}
+
+@article{mayeesha2021bengaliqa,
+  title   = {Deep learning based question answering system in {B}engali},
+  author  = {Mayeesha, Tasmiah Tahsin and Sarwar, Abdullah Md and Rahman, Rashedur M.},
+  journal = {Journal of Information and Telecommunication},
+  volume  = {5}, number = {2}, pages = {145--178}, year = {2021},
+  publisher = {Taylor \& Francis},
+  doi     = {10.1080/24751839.2020.1833136}
+}
+
+@misc{meta2024llama32,
+  author       = {{Meta AI}},
+  title        = {Llama 3.2: Revolutionizing edge {AI} and vision with open, customizable models},
+  howpublished = {Meta AI Blog},
+  year         = {2024}, month = sep, note = {Published 25 September 2024},
+  url          = {https://ai.meta.com/blog/llama-3-2-connect-2024-vision-edge-mobile-devices/}
+}
+
+@article{nuruzzaman2022informing,
+  author  = {Nuruzzaman, Md. and Zapata, Tomas and McIsaac, Michelle and others},
+  title   = {Informing investment in health workforce in {Bangladesh}: a health labour market analysis},
+  journal = {Human Resources for Health},
+  volume  = {20},
+  pages   = {73},
+  year    = {2022},
+  doi     = {10.1186/s12960-022-00769-2}
+}
+
+@article{saha2026doctalkbn,
+  author        = {Saha, Anik and Naznin, Fahmida Sultana and Sadi, Sadatul Islam and Promi, Ananya Shahrin and Navid, Wahid Al Azad and Shahriyar, Rifat},
+  title         = {{DocTalkBN}: A Novel Dataset of Expert Telemedicine Conversations in {Bengali}},
+  year          = {2026},
+  journal     = {arXiv preprint arXiv:2608.27110},
+}
+
+@inproceedings{sami2025comparative,
+  author    = {Sami, K. M. Jubair and Sumit, Dipto and Hossain, Ariyan and Sadeque, Farig},
+  title     = {A Comparative Analysis of Retrieval-Augmented Generation Techniques for {Bengali} Standard-to-Dialect Machine Translation Using {LLMs}},
+  booktitle = {Proc. Second Workshop on Bangla Language Processing (BLP-2025)},
+  address   = {Mumbai, India}, publisher = {Association for Computational Linguistics},
+  month     = dec, year = {2025}, pages = {266--279},
+  doi       = {10.18653/v1/2025.banglalp-1.22},
+  url       = {https://aclanthology.org/2025.banglalp-1.22/}
+}
+
+@inproceedings{samin2024bangladialecto,
+  author    = {Samin, Md. Nazmus Sadat and Ahad, Jawad Ibn and Medha, Tanjila Ahmed and Rahman, Fuad and Amin, Mohammad Ruhul and Mohammed, Nabeel and Rahman, Shafin},
+  title     = {{BanglaDialecto}: An End-to-End {AI}-Powered Regional Speech Standardization},
+  booktitle = {Proc. 2024 IEEE International Conference on Big Data (BigData)},
+  address   = {Washington, DC, USA},
+  year      = {2024}, pages = {1635--1644},
+  doi       = {10.1109/BigData62323.2024.10826131}
+}
+
+@inproceedings{shifa2025somajgyaan,
+  title     = "{SOMAJGYAAN}: A Dataset for Evaluating {LLM}s on {B}angla Culture, Social Knowledge, and Low-Resource Language Adaptation",
+  author    = "Shifa, Fariha Anjum and Shochcho, Muhtasim Ibteda and Arean, Abdullah Ibne Hanif and Rahman, Mohammad Ashfaq Ur and Mazumder, Akm Moshiur Rahman and Faiak, Ahaj Mahhin and Fahim, Md and Amin, M Ashraful and Ali, Amin Ahsan and Rahman, Akmmahbubur",
+  booktitle = "Findings of the Association for Computational Linguistics: IJCNLP-AACL 2025",
+  month = dec, year = "2025", address = "Mumbai, India",
+  publisher = "The Asian Federation of Natural Language Processing and The Association for Computational Linguistics",
+  pages = "2157--2177", doi = "10.18653/v1/2025.findings-ijcnlp.134",
+  url = "https://aclanthology.org/2025.findings-ijcnlp.134/"
+}
+
+@inproceedings{xiong2024medrag,
+  author    = {Xiong, Guangzhi and Jin, Qiao and Lu, Zhiyong and Zhang, Aidong},
+  title     = {Benchmarking Retrieval-Augmented Generation for Medicine},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2024},
+  month     = aug,
+  year      = {2024},
+  address   = {Bangkok, Thailand},
+  publisher = {Association for Computational Linguistics},
+  pages     = {6233--6251},
+  doi       = {10.18653/v1/2024.findings-acl.372}
+}
+
+@inproceedings{zhang2020bertscore,
+  author    = {Zhang, Tianyi and Kishore, Varsha and Wu, Felix and Weinberger, Kilian Q. and Artzi, Yoav},
+  title     = {{BERTScore}: Evaluating Text Generation with {BERT}},
+  booktitle = {Proc. Int. Conf. Learn. Represent. (ICLR)},
+  year      = {2020},
+  url       = {https://openreview.net/forum?id=SkeHuCVFDr}
+}
+
+@misc{bgereranker2024,
+  author       = {{BAAI}},
+  title        = {{bge-reranker-v2-m3}: multilingual cross-encoder reranker},
+  howpublished = {Hugging Face model card},
+  year         = {2024},
+  url          = {https://huggingface.co/BAAI/bge-reranker-v2-m3}
+}
+
+@inproceedings{prama2025sylheticap,
+  author    = {Prama, Tabia Tanzin},
+  title     = {{LLMs} for Low-Resource Dialect Translation Using Context-Aware Prompting: A Case Study on {Sylheti}},
+  booktitle = {Proc. Second Workshop on Bangla Language Processing (BLP-2025)},
+  address   = {Mumbai, India},
+  publisher = {Association for Computational Linguistics},
+  month     = dec,
+  year      = {2025},
+  pages     = {292--308},
+  doi       = {10.18653/v1/2025.banglalp-1.24},
+  url       = {https://aclanthology.org/2025.banglalp-1.24/}
+}
+
+@article{sami2026dialectbias,
+  author       = {Sami, K. M. Jubair and Sumit, Dipto and Hossain, Ariyan and Sadeque, Farig},
+  title        = {Benchmarking {Bengali} Dialectal Bias: A Multi-Stage Framework Integrating {RAG}-Based Translation and Human-Augmented {RLAIF}},
+  journal     = {arXiv preprint arXiv:2603.21359},
+  year         = {2026},
+  url          = {https://arxiv.org/abs/2603.21359}
+}
+
+@inproceedings{held2023tada,
+  author    = {Held, William and Ziems, Caleb and Yang, Diyi},
+  title     = {{TADA}: Task Agnostic Dialect Adapters for {English}},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2023},
+  address   = {Toronto, Canada},
+  publisher = {Association for Computational Linguistics},
+  year      = {2023},
+  doi       = {10.18653/v1/2023.findings-acl.51},
+  url       = {https://aclanthology.org/2023.findings-acl.51/}
+}
+
+@inproceedings{ziems2023multivalue,
+  author    = {Ziems, Caleb and Held, William and Yang, Jingfeng and Dhamala, Jwala and Gupta, Rahul and Yang, Diyi},
+  title     = {{Multi-VALUE}: A Framework for Cross-Dialectal {English} {NLP}},
+  booktitle = {Proc. 61st Annu. Meeting Assoc. Comput. Linguistics (Volume 1: Long Papers)},
+  address   = {Toronto, Canada},
+  publisher = {Association for Computational Linguistics},
+  year      = {2023},
+  doi       = {10.18653/v1/2023.acl-long.44},
+  url       = {https://aclanthology.org/2023.acl-long.44/}
+}
+
+@article{zhang2024raft,
+  author       = {Zhang, Tianjun and Patil, Shishir G. and Jain, Naman and Shen, Sheng and Zaharia, Matei and Stoica, Ion and Gonzalez, Joseph E.},
+  title        = {{RAFT}: Adapting Language Model to Domain Specific {RAG}},
+  journal     = {arXiv preprint arXiv:2403.10131},
+  year         = {2024},
+  url          = {https://arxiv.org/abs/2403.10131}
+}
+
+@inproceedings{zhang2024rtuning,
+  author    = {Zhang, Hanning and Diao, Shizhe and Lin, Yong and Fung, Yi R. and Lian, Qing and Wang, Xingyao and Chen, Yangyi and Ji, Heng and Zhang, Tong},
+  title     = {{R-Tuning}: Instructing Large Language Models to Say `{I} Don't Know'},
+  booktitle = {Proc. 2024 Conf. North Amer. Chapter Assoc. Comput. Linguistics: Human Language Technologies (Volume 1: Long Papers)},
+  address   = {Mexico City, Mexico},
+  publisher = {Association for Computational Linguistics},
+  year      = {2024},
+  doi       = {10.18653/v1/2024.naacl-long.394},
+  url       = {https://aclanthology.org/2024.naacl-long.394/}
+}
+
+@inproceedings{rafailov2023dpo,
+  author    = {Rafailov, Rafael and Sharma, Archit and Mitchell, Eric and Ermon, Stefano and Manning, Christopher D. and Finn, Chelsea},
+  title     = {Direct Preference Optimization: Your Language Model is Secretly a Reward Model},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  volume    = {36},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2305.18290}
+}
+
+@inproceedings{zheng2023judge,
+  author    = {Zheng, Lianmin and Chiang, Wei-Lin and Sheng, Ying and Zhuang, Siyuan and Wu, Zhanghao and Zhuang, Yonghao and Lin, Zi and Li, Zhuohan and Li, Dacheng and Xing, Eric P. and Zhang, Hao and Gonzalez, Joseph E. and Stoica, Ion},
+  title     = {Judging {LLM}-as-a-Judge with {MT-Bench} and {Chatbot Arena}},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track},
+  volume    = {36},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2306.05685}
+}
+
+@inproceedings{hada2024llmevaluators,
+  author    = {Hada, Rishav and Gumma, Varun and de Wynter, Adrian and Diddee, Harshita and Ahmed, Mohamed and Choudhury, Monojit and Bali, Kalika and Sitaram, Sunayana},
+  title     = {Are Large Language Model-based Evaluators the Solution to Scaling Up Multilingual Evaluation?},
+  booktitle = {Findings of the Association for Computational Linguistics: EACL 2024},
+  address   = {St. Julian's, Malta},
+  publisher = {Association for Computational Linguistics},
+  year      = {2024},
+  url       = {https://aclanthology.org/2024.findings-eacl.71/}
+}
+
+% ---------------- additional references for the Chapter 4 paper ----------------
+@inproceedings{vaswani2017attention,
+  author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and Kaiser, {\L}ukasz and Polosukhin, Illia},
+  title     = {Attention Is All You Need},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {30},
+  year      = {2017}
+}
+@incollection{platt1999probabilistic,
+  author    = {Platt, John C.},
+  title     = {Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods},
+  booktitle = {Advances in Large Margin Classifiers},
+  publisher = {MIT Press},
+  pages     = {61--74},
+  year      = {1999}
+}
+@inproceedings{guo2017calibration,
+  author    = {Guo, Chuan and Pleiss, Geoff and Sun, Yu and Weinberger, Kilian Q.},
+  title     = {On Calibration of Modern Neural Networks},
+  booktitle = {Proc. 34th International Conference on Machine Learning (ICML)},
+  pages     = {1321--1330},
+  year      = {2017}
+}
+@article{cortes1995svm,
+  author  = {Cortes, Corinna and Vapnik, Vladimir},
+  title   = {Support-Vector Networks},
+  journal = {Machine Learning},
+  volume  = {20},
+  number  = {3},
+  pages   = {273--297},
+  year    = {1995}
+}
+@article{friedman2001gbm,
+  author  = {Friedman, Jerome H.},
+  title   = {Greedy Function Approximation: A Gradient Boosting Machine},
+  journal = {The Annals of Statistics},
+  volume  = {29},
+  number  = {5},
+  pages   = {1189--1232},
+  year    = {2001}
+}
+@article{oord2018cpc,
+  author       = {van den Oord, Aaron and Li, Yazhe and Vinyals, Oriol},
+  title        = {Representation Learning with Contrastive Predictive Coding},
+  journal     = {arXiv preprint arXiv:1807.03748},
+  year         = {2018}
+}
+@inproceedings{loshchilov2019adamw,
+  author    = {Loshchilov, Ilya and Hutter, Frank},
+  title     = {Decoupled Weight Decay Regularization},
+  booktitle = {Proc. International Conference on Learning Representations (ICLR)},
+  year      = {2019}
+}
+@article{youden1950index,
+  author  = {Youden, W. J.},
+  title   = {Index for Rating Diagnostic Tests},
+  journal = {Cancer},
+  volume  = {3},
+  number  = {1},
+  pages   = {32--35},
+  year    = {1950}
+}
+@article{nogueira2019passage,
+  author       = {Nogueira, Rodrigo and Cho, Kyunghyun},
+  title        = {Passage Re-ranking with {BERT}},
+  journal     = {arXiv preprint arXiv:1901.04085},
+  year         = {2019}
+}
+@inproceedings{lee2022dedup,
+  author    = {Lee, Katherine and Ippolito, Daphne and Nystrom, Andrew and Zhang, Chiyuan and Eck, Douglas and Callison-Burch, Chris and Carlini, Nicholas},
+  title     = {Deduplicating Training Data Makes Language Models Better},
+  booktitle = {Proc. 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages     = {8424--8445},
+  year      = {2022}
+}
+@article{rackauckas2024ragfusion,
+  author       = {Rackauckas, Zackary},
+  title        = {{RAG-Fusion}: A New Take on Retrieval-Augmented Generation},
+  journal     = {arXiv preprint arXiv:2402.03367},
+  year         = {2024}
+}
+@inproceedings{lee2025routerretriever,
+  author    = {Lee, Hyunji and Soldaini, Luca and Cohan, Arman and Seo, Minjoon and Lo, Kyle},
+  title     = {{RouterRetriever}: Routing over a Mixture of Expert Embedding Models},
+  booktitle = {Proc. AAAI Conference on Artificial Intelligence},
+  volume    = {39},
+  number    = {11},
+  pages     = {11995--12003},
+  year      = {2025},
+  doi       = {10.1609/aaai.v39i11.33306}
+}
+@inproceedings{xu2022ditto,
+  author    = {Xu, Jin and Liu, Xiaojiang and Yan, Jianhao and Cai, Deng and Li, Huayang and Li, Jian},
+  title     = {Learning to Break the Loop: Analyzing and Mitigating Repetitions for Neural Text Generation},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {35},
+  year      = {2022}
+}
+@book{efron1993bootstrap,
+  author    = {Efron, Bradley and Tibshirani, Robert J.},
+  title     = {An Introduction to the Bootstrap},
+  publisher = {Chapman \& Hall},
+  year      = {1993}
+}
+@inproceedings{wei2022flan,
+  author    = {Wei, Jason and Bosma, Maarten and Zhao, Vincent Y. and Guu, Kelvin and Yu, Adams Wei and Lester, Brian and Du, Nan and Dai, Andrew M. and Le, Quoc V.},
+  title     = {Finetuned Language Models Are Zero-Shot Learners},
+  booktitle = {Proc. International Conference on Learning Representations (ICLR)},
+  year      = {2022}
+}
+@online{chatgaiyyabench2026,
+  author       = {Asifuzzaman, A. K. M.},
+  title        = {{ChatgaiyyaLM}: {Chittagonian} Resources and the {ChatgaiyyaBench} Multi-Task Benchmark},
+  organization = {GitHub repository},
+  year         = {2026},
+  url          = {https://github.com/A-K-M-Asifuzzaman/Chatgaiya-AI},
+  urldate      = {2026-09-28}
+}
+
+
+% Added from Thesis P2 bibliography because Chapters 1--3 cite these entries.
+@inproceedings{es2024ragas,
+  author    = {Es, Shahul and James, Jithin and Espinosa-Anke, Luis and Schockaert, Steven},
+  title     = {{RAGAS}: Automated Evaluation of Retrieval Augmented Generation},
+  booktitle = {Proc. 18th Conference of the European Chapter of the Association for Computational Linguistics: System Demonstrations},
+  year      = {2024},
+  pages     = {150--158}
+}
+
+@book{who2021ethics,
+  author    = {{World Health Organization}},
+  title     = {Ethics and Governance of Artificial Intelligence for Health: WHO Guidance},
+  publisher = {World Health Organization},
+  address   = {Geneva, Switzerland},
+  year      = {2021}
+}
+
+% ---- added for the extended Chapter 2 (all verified online) ----
+@inproceedings{huang2024lorahub,
+  author    = {Huang, Chengsong and Liu, Qian and Lin, Bill Yuchen and Pang, Tianyu and Du, Chao and Lin, Min},
+  title     = {{LoraHub}: Efficient Cross-Task Generalization via Dynamic {LoRA} Composition},
+  booktitle = {First Conference on Language Modeling (COLM)},
+  year      = {2024},
+  url       = {https://openreview.net/forum?id=w8eCnnq57m}
+}
+@inproceedings{wu2024mole,
+  author    = {Wu, Xun and Huang, Shaohan and Wei, Furu},
+  title     = {Mixture of {LoRA} Experts},
+  booktitle = {Proc. Twelfth International Conference on Learning Representations (ICLR)},
+  year      = {2024}
+}
+@article{buehler2024xlora,
+  author  = {Buehler, Eric L. and Buehler, Markus J.},
+  title   = {{X-LoRA}: Mixture of Low-Rank Adapter Experts, a Flexible Framework for Large Language Models with Applications in Protein Mechanics and Molecular Design},
+  journal = {APL Machine Learning},
+  volume  = {2},
+  number  = {2},
+  pages   = {026119},
+  year    = {2024}
+}
+@inproceedings{pfeiffer2021adapterfusion,
+  author    = {Pfeiffer, Jonas and Kamath, Aishwarya and R{\"u}ckl{\'e}, Andreas and Cho, Kyunghyun and Gurevych, Iryna},
+  title     = {{AdapterFusion}: Non-Destructive Task Composition for Transfer Learning},
+  booktitle = {Proc. 16th Conference of the European Chapter of the Association for Computational Linguistics: Main Volume},
+  year      = {2021},
+  pages     = {487--503},
+  address   = {Online},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2021.eacl-main.39}
+}
+@inproceedings{sheng2024slora,
+  author    = {Sheng, Ying and Cao, Shiyi and Li, Dacheng and Hooper, Coleman and Lee, Nicholas and Yang, Shuo and Chou, Christopher and Zhu, Banghua and Zheng, Lianmin and Keutzer, Kurt and Gonzalez, Joseph E. and Stoica, Ion},
+  title     = {{S-LoRA}: Serving Thousands of Concurrent {LoRA} Adapters},
+  booktitle = {Proc. Machine Learning and Systems (MLSys)},
+  volume    = {6},
+  pages     = {296--311},
+  year      = {2024}
+}
+@article{zampieri2020survey,
+  author  = {Zampieri, Marcos and Nakov, Preslav and Scherrer, Yves},
+  title   = {Natural Language Processing for Similar Languages, Varieties, and Dialects: A Survey},
+  journal = {Natural Language Engineering},
+  volume  = {26},
+  number  = {6},
+  pages   = {595--612},
+  year    = {2020},
+  doi     = {10.1017/S1351324920000492}
+}
+@inproceedings{bouamor2018madar,
+  author    = {Bouamor, Houda and Habash, Nizar and Salameh, Mohammad and Zaghouani, Wajdi and Rambow, Owen and Abdulrahim, Dana and Obeid, Ossama and Khalifa, Salam and Eryani, Fadhl and Erdmann, Alexander and Oflazer, Kemal},
+  title     = {The {MADAR} {A}rabic Dialect Corpus and Lexicon},
+  booktitle = {Proc. Eleventh International Conference on Language Resources and Evaluation (LREC 2018)},
+  year      = {2018},
+  address   = {Miyazaki, Japan},
+  publisher = {European Language Resources Association (ELRA)},
+  url       = {https://aclanthology.org/L18-1535/}
+}
+@inproceedings{abdulmageed2020nadi,
+  author    = {Abdul-Mageed, Muhammad and Zhang, Chiyu and Bouamor, Houda and Habash, Nizar},
+  title     = {{NADI} 2020: The First Nuanced {A}rabic Dialect Identification Shared Task},
+  booktitle = {Proc. Fifth Arabic Natural Language Processing Workshop},
+  year      = {2020},
+  pages     = {97--110},
+  address   = {Barcelona, Spain (Online)},
+  publisher = {Association for Computational Linguistics},
+  url       = {https://aclanthology.org/2020.wanlp-1.9/}
+}
+@inproceedings{abdulmageed2023nadi,
+  author    = {Abdul-Mageed, Muhammad and Elmadany, AbdelRahim and Zhang, Chiyu and Nagoudi, El Moatez Billah and Bouamor, Houda and Habash, Nizar},
+  title     = {{NADI} 2023: The Fourth Nuanced {A}rabic Dialect Identification Shared Task},
+  booktitle = {Proc. ArabicNLP 2023},
+  year      = {2023},
+  pages     = {600--613},
+  address   = {Singapore (Hybrid)},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2023.arabicnlp-1.62}
+}
+@inproceedings{honnet2018swissgerman,
+  author    = {Honnet, Pierre-Edouard and Popescu-Belis, Andrei and Musat, Claudiu and Baeriswyl, Michael},
+  title     = {Machine Translation of Low-Resource Spoken Dialects: Strategies for Normalizing {S}wiss {G}erman},
+  booktitle = {Proc. Eleventh International Conference on Language Resources and Evaluation (LREC 2018)},
+  year      = {2018},
+  address   = {Miyazaki, Japan},
+  publisher = {European Language Resources Association (ELRA)},
+  url       = {https://aclanthology.org/L18-1597/}
+}
+@inproceedings{kantharuban2023dialectgap,
+  author    = {Kantharuban, Anjali and Vuli{\'c}, Ivan and Korhonen, Anna},
+  title     = {Quantifying the Dialect Gap and its Correlates Across Languages},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2023},
+  year      = {2023},
+  pages     = {7226--7245},
+  address   = {Singapore},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2023.findings-emnlp.481}
+}
+@inproceedings{faisal2024dialectbench,
+  author    = {Faisal, Fahim and Ahia, Orevaoghene and Srivastava, Aarohi and Ahuja, Kabir and Chiang, David and Tsvetkov, Yulia and Anastasopoulos, Antonios},
+  title     = {{DIALECTBENCH}: An {NLP} Benchmark for Dialects, Varieties, and Closely-Related Languages},
+  booktitle = {Proc. 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  year      = {2024},
+  pages     = {14412--14454},
+  address   = {Bangkok, Thailand},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2024.acl-long.777}
+}
+@inproceedings{ustun2024aya,
+  author    = {{\"U}st{\"u}n, Ahmet and Aryabumi, Viraat and Yong, Zheng and Ko, Wei-Yin and D'souza, Daniel and Onilude, Gbemileke and others},
+  title     = {Aya Model: An Instruction Finetuned Open-Access Multilingual Language Model},
+  booktitle = {Proc. 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  year      = {2024},
+  pages     = {15894--15939},
+  address   = {Bangkok, Thailand},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2024.acl-long.845}
+}
+@inproceedings{kabir2024benllmeval,
+  author    = {Kabir, Mohsinul and Islam, Mohammed Saidul and Laskar, Md Tahmid Rahman and Nayeem, Mir Tafseer and Bari, M Saiful and Hoque, Enamul},
+  title     = {{BenLLM-Eval}: A Comprehensive Evaluation into the Potentials and Pitfalls of Large Language Models on {B}engali {NLP}},
+  booktitle = {Proc. 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)},
+  year      = {2024},
+  pages     = {2238--2252},
+  address   = {Torino, Italia},
+  publisher = {ELRA and ICCL},
+  url       = {https://aclanthology.org/2024.lrec-main.201/}
+}
+@inproceedings{khattab2020colbert,
+  author    = {Khattab, Omar and Zaharia, Matei},
+  title     = {{ColBERT}: Efficient and Effective Passage Search via Contextualized Late Interaction over {BERT}},
+  booktitle = {Proc. 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  year      = {2020},
+  pages     = {39--48},
+  publisher = {ACM},
+  doi       = {10.1145/3397271.3401075}
+}
+@inproceedings{nogueira2020monot5,
+  author    = {Nogueira, Rodrigo and Jiang, Zhiying and Pradeep, Ronak and Lin, Jimmy},
+  title     = {Document Ranking with a Pretrained Sequence-to-Sequence Model},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2020},
+  year      = {2020},
+  pages     = {708--718},
+  address   = {Online},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2020.findings-emnlp.63}
+}
+@inproceedings{fahim2024banglatlit,
+  author    = {Fahim, Md and Shifat, Fariha Tanjim and Haider, Fabiha and Barua, Deeparghya Dutta and Sourove, MD Sakib Ul Rahman and Ishmam, Md Farhan and Bhuiyan, Md Farhad Alam},
+  title     = {{BanglaTLit}: A Benchmark Dataset for Back-Transliteration of Romanized {B}angla},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2024},
+  year      = {2024},
+  pages     = {14656--14672},
+  address   = {Miami, Florida, USA},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2024.findings-emnlp.859}
+}

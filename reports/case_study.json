@@ -77,10 +77,10 @@
       "extra_df": 196874.4910200824
     },
     "orders_per_session": {
-      "rel_effect": 0.035089251979277813,
-      "rel_ci_low": 0.01725680852881524,
-      "rel_ci_high": 0.05292169542974039,
-      "p_value": 8.706963124448271e-05
+      "rel_effect": 0.05090375150508364,
+      "rel_ci_low": 0.03295186752023467,
+      "rel_ci_high": 0.0688556354899326,
+      "p_value": 1.2277354537211956e-08
     },
     "false_positives": [],
     "peeking_stop_day": 2

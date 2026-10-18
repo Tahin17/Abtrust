@@ -1,0 +1,101 @@
+{
+  "schema_version": 2,
+  "generated_utc": "2026-10-18 19:00",
+  "python": "3.10.11",
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "studies": {
+    "stress_fixed": {
+      "question": "How do fixed-horizon methods behave near their limits?",
+      "headline": "Synthetic diagnostics only. Selected treatment outcomes deliberately violate randomization; inspect bias and coverage.",
+      "seconds": 28.0,
+      "metadata": {
+        "simulated_at_utc": "2026-10-18T18:59:55+00:00",
+        "runtime": {
+          "python": "3.10.11",
+          "platform": "Windows",
+          "dependencies": {
+            "abtrust": "0.3.0",
+            "numpy": "2.2.6",
+            "scipy": "1.15.3",
+            "pandas": "2.3.3",
+            "matplotlib": "3.10.9",
+            "streamlit": "1.65.0"
+          },
+          "git": {
+            "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+            "dirty": true
+          },
+          "source_sha256": "7df4f02e3f9a7e4aca693945196d9a9ec8f9e44d1c72d4ecd6844db6139f5992"
+        },
+        "parameters": {
+          "n_sims": 2000,
+          "seed": 101,
+          "n_control": 400
+        },
+        "implementation_sha256": "387b9c755dfc3c5739d5ed9f5d5c25072aa1f81853a19fab1350ecd99bdcdbe7",
+        "scenario_configuration": {
+          "alpha": 0.05,
+          "baseline_conversion": 0.002,
+          "covariate_correlation": 0.8,
+          "noise_sd_control": 1,
+          "noise_sd_treatment": 1.5,
+          "continuous_effect": 0.1,
+          "binary_effect": 0.001,
+          "deterministic_effect": 0.125,
+          "selection": "remove the lowest 20% of treatment outcomes in the INVALID scenario",
+          "constant_outcomes": "deterministic fixture; not evidence for rare-outcome interval validity"
+        }
+      },
+      "csv_sha256": "53765eda0c670e139597348e1a946a150b8e86f2ac2468d7c3dc531ada55da7c"
+    },
+    "stress_gaussian": {
+      "question": "How does the known-SD Gaussian procedure behave across monitoring schedules?",
+      "headline": "Synthetic calibration under genuinely known Gaussian SDs and a prespecified mixture scale.",
+      "seconds": 12.4,
+      "metadata": {
+        "simulated_at_utc": "2026-10-18T19:00:23+00:00",
+        "runtime": {
+          "python": "3.10.11",
+          "platform": "Windows",
+          "dependencies": {
+            "abtrust": "0.3.0",
+            "numpy": "2.2.6",
+            "scipy": "1.15.3",
+            "pandas": "2.3.3",
+            "matplotlib": "3.10.9",
+            "streamlit": "1.65.0"
+          },
+          "git": {
+            "commit": "2f959bdd7ed0503186fa15235b53b5af2673eda2",
+            "dirty": true
+          },
+          "source_sha256": "7df4f02e3f9a7e4aca693945196d9a9ec8f9e44d1c72d4ecd6844db6139f5992"
+        },
+        "parameters": {
+          "n_sims": 2000,
+          "seed": 102,
+          "n_per_arm": 500
+        },
+        "implementation_sha256": "ebd0f2718e4625a62bce52b26d9b7f8873f968314479fd8b6214bc6fa6d5e826",
+        "scenario_configuration": {
+          "alpha": 0.05,
+          "known_sd_control": 1.0,
+          "known_sd_treatment": 1.5,
+          "tau": 0.23103629827824698,
+          "effects": [
+            0,
+            0.2
+          ],
+          "looks": [
+            1,
+            20,
+            100
+          ],
+          "assumptions": "independent Gaussian arrivals; equal arm sizes; SD and tau fixed before outcomes"
+        }
+      },
+      "csv_sha256": "d0d8e45a05ea210d100cebdcd218fc74da83a8a116a9d8a09ff3e64cc2e19374"
+    }
+  }
+}

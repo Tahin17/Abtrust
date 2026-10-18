@@ -17,8 +17,16 @@ from . import __version__
 
 
 def _cmd_plan(a: argparse.Namespace) -> int:
+    import math
+
     from .design import sample_size_mean, sample_size_proportion
 
+    if not math.isfinite(a.rho) or not -1 < a.rho < 1:
+        raise ValueError("rho must be finite and in (-1, 1)")
+    if a.relative and a.baseline is None:
+        raise ValueError("--relative requires --baseline")
+    if a.rho and a.baseline is not None:
+        raise ValueError("--rho is supported for continuous metrics with --sd")
     if a.baseline is not None:
         plan = sample_size_proportion(a.baseline, a.mde, a.alpha, a.power, a.ratio, relative=a.relative)
     elif a.sd is not None:
@@ -28,7 +36,7 @@ def _cmd_plan(a: argparse.Namespace) -> int:
         print("error: give --baseline (conversion metric) or --sd (mean metric)", file=sys.stderr)
         return 2
     print(plan)
-    if a.daily:
+    if a.daily is not None:
         print(f"At {a.daily:,.0f} new units/day: {plan.days(a.daily):.1f} days (round up to whole weeks).")
     return 0
 
@@ -39,11 +47,22 @@ def _parse_metrics(a: argparse.Namespace):
     primary = set(a.primary or [])
     guard = set(a.guardrail or [])
     lower = set(a.lower_is_better or [])
+    if primary & guard:
+        raise ValueError("metrics cannot be both primary and guardrail: " + ", ".join(sorted(primary & guard)))
+    declared = {s.partition(":")[0] for s in a.metric or []} | set(a.ratio or [])
+    for option, names in (("--primary", primary), ("--guardrail", guard), ("--lower-is-better", lower)):
+        unknown = names - declared
+        if unknown:
+            raise ValueError(f"{option} names undeclared metrics: {', '.join(sorted(unknown))}")
     margins = {}
     for item in a.guardrail_max_harm or []:
         name, sep, value = item.partition("=")
         if not sep:
             raise SystemExit("--guardrail-max-harm must be NAME=ABSOLUTE_MARGIN")
+        if name not in guard:
+            raise ValueError(f"harm margin {name!r} must name a declared guardrail")
+        if name in margins:
+            raise ValueError(f"duplicate harm margin for {name!r}")
         try:
             margins[name] = float(value)
         except ValueError as exc:
@@ -72,8 +91,11 @@ def _parse_metrics(a: argparse.Namespace):
 
 
 def _cmd_analyze(a: argparse.Namespace) -> int:
+    from dataclasses import asdict
+
     import pandas as pd
 
+    from .provenance import write_analysis_manifest
     from .readout import analyze
 
     df = pd.read_csv(a.data)
@@ -84,13 +106,20 @@ def _cmd_analyze(a: argparse.Namespace) -> int:
         if len(parts) != len(arms):
             raise SystemExit(f"error: --split needs {len(arms)} values in the order {arms}")
         split = dict(zip(arms, parts, strict=True))
+    metrics = _parse_metrics(a)
     readout = analyze(
-        df, a.arm, a.control, _parse_metrics(a), expected_split=split, alpha=a.alpha, correction=a.correction,
+        df, a.arm, a.control, metrics, expected_split=split, alpha=a.alpha, correction=a.correction,
         unit_col=a.unit, missing_threshold=a.missing_threshold
     )
     md = readout.to_markdown(title=a.title)
     if a.out:
         Path(a.out).write_text(md, encoding="utf-8")
+        write_analysis_manifest(Path(a.out).with_suffix(".manifest.json"), data_kind="user_supplied",
+                                input_path=a.data, settings={"arm_column": a.arm, "control": a.control,
+                                "unit_column": a.unit, "metrics": [asdict(m) for m in metrics],
+                                "expected_split": dict(zip(readout.arm_counts, readout.srm.expected_ratios, strict=True)),
+                                "alpha": a.alpha, "correction": a.correction,
+                                "missing_threshold": a.missing_threshold})
         print(f"Readout written to {a.out}")
         print(readout.decision())
     else:
@@ -112,14 +141,33 @@ def _cmd_validate(a: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_render(a: argparse.Namespace) -> int:
+    from .report import render_validation_report
+
+    path = render_validation_report(a.out, figures=not a.no_figures)
+    print(f"Presentation rebuilt from saved results: {path}")
+    return 0
+
+
+def _cmd_stress(a: argparse.Namespace) -> int:
+    from .report import write_validation_report
+    from .stress import run_stress
+
+    results = run_stress(a.simulations)
+    path = write_validation_report(results, a.out, figures=False)
+    print(f"Supplemental synthetic stress report: {path}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="abtrust", description="A/B test analysis you can trust.")
     p.add_argument("--version", action="version", version=f"abtrust {__version__}")
     sub = p.add_subparsers(dest="command", required=True)
 
     pl = sub.add_parser("plan", help="sample size for a planned experiment")
-    pl.add_argument("--baseline", type=float, help="baseline conversion rate (conversion metric)")
-    pl.add_argument("--sd", type=float, help="per-unit standard deviation (mean metric)")
+    design = pl.add_mutually_exclusive_group(required=True)
+    design.add_argument("--baseline", type=float, help="baseline conversion rate (conversion metric)")
+    design.add_argument("--sd", type=float, help="per-unit standard deviation (mean metric)")
     pl.add_argument("--mde", type=float, required=True, help="minimum detectable effect")
     pl.add_argument("--relative", action="store_true", help="--mde is relative to the baseline rate")
     pl.add_argument("--rho", type=float, default=0.0, help="correlation with a CUPED covariate (mean metric)")
@@ -158,12 +206,24 @@ def build_parser() -> argparse.ArgumentParser:
     va.add_argument("--out", default="reports", help="output directory")
     va.add_argument("--no-figures", action="store_true")
     va.set_defaults(func=_cmd_validate)
+    render = sub.add_parser("render", help="rebuild presentation without rewriting saved simulation results")
+    render.add_argument("--out", default="reports", help="directory containing saved validation results")
+    render.add_argument("--no-figures", action="store_true")
+    render.set_defaults(func=_cmd_render)
+    stress = sub.add_parser("stress", help="supplemental assumption checks, separate from the seven core studies")
+    stress.add_argument("--simulations", type=int, default=2000, help="replications per cell; minimum 50")
+    stress.add_argument("--out", default="reports/stress", help="output directory")
+    stress.set_defaults(func=_cmd_stress)
     return p
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
-    return args.func(args)
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    try:
+        return args.func(args)
+    except (ValueError, KeyError, OSError) as exc:
+        parser.error(str(exc))
 
 
 if __name__ == "__main__":  # pragma: no cover

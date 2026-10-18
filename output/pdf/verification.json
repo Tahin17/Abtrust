@@ -1,0 +1,22 @@
+{
+  "pages": 72,
+  "paper": "A4",
+  "chapters": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "bibliography_entries": 106,
+  "unresolved_citations_or_cross_references": false,
+  "missing_glyph_warnings": false,
+  "overfull_boxes": false,
+  "empty_pages": false,
+  "text_outside_page": false,
+  "existing_defense_date_placeholder_preserved": true,
+  "sha256": "8b216233b324e722b194c67f108608e6fd760e37a1fedfc94690727b1e508277",
+  "accent_name_pages": [
+    63,
+    67
+  ]
+}

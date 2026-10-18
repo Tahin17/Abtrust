@@ -1,0 +1,118 @@
+% ============================================================================
+% BracU thesis project assembled from the user's Thesis_Template.zip,
+% Thesis P2.docx / main (1).tex, and Chapter4_Methodology_IEEE_Overleaf.zip.
+% Overleaf: upload this whole ZIP. Compiler: pdfLaTeX. Bibliography tool: Biber.
+% ============================================================================
+\documentclass[12pt,oneside,openany]{report}
+\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm]{geometry}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+\newunicodechar{ć}{\'{c}}
+\usepackage{textcomp}
+\usepackage{csquotes}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\graphicspath{{images/}{figures/}}
+\usepackage{caption}
+\usepackage{array,booktabs,longtable,multirow,tabularx,makecell,calc}
+\newcounter{none}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,shapes.misc,fit,calc,backgrounds,decorations.pathreplacing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{adjustbox}
+\usepackage{etoolbox}
+\usepackage[nottoc]{tocbibind}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,filecolor=magenta,urlcolor=black,citecolor=black}
+\urlstyle{same}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0.35em}
+\setlength{\emergencystretch}{3em}
+\let\cleardoublepage=\clearpage
+
+% Pandoc's Word-to-LaTeX export marked source text with \hl; here it is deliberately
+% neutralized so the thesis text is not yellow-highlighted.
+\long\def\hl#1{#1}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Chapter 4 helper commands/styles carried over from the supplied IEEE project.
+\definecolor{navy}{HTML}{1E4E8C}
+\definecolor{navylt}{HTML}{EEF3FA}
+\definecolor{amber}{HTML}{C0701A}
+\definecolor{amberlt}{HTML}{FFF3E3}
+\definecolor{teal}{HTML}{16877F}
+\definecolor{teallt}{HTML}{E6F4F2}
+\definecolor{greyd}{HTML}{8C929B}
+\definecolor{greylt}{HTML}{F2F3F5}
+\definecolor{ink}{HTML}{1B2330}
+\definecolor{redlt}{HTML}{FDECEC}
+\definecolor{redd}{HTML}{B42318}
+\newcommand{\cond}[1]{\texttt{\small #1}}
+\newcommand{\condt}[1]{{\ttfamily\scriptsize #1}}
+\newcommand{\tl}[1]{\textit{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{H}[1]{>{\raggedright\arraybackslash\hspace{0pt}}p{#1}}% ragged, first word may hyphenate
+\renewcommand{\arraystretch}{1.1}
+\tikzset{
+  box/.style={draw=navy, rounded corners=2pt, align=center, fill=navylt, font=\scriptsize, inner sep=3pt, line width=0.6pt},
+  lora/.style={box, fill=navy, text=white, draw=navy},
+  safe/.style={box, fill=amberlt, draw=amber},
+  cpu/.style={box, fill=teallt, draw=teal},
+  grey/.style={box, fill=greylt, draw=greyd},
+  arr/.style={-{Stealth[length=1.8mm]}, line width=0.7pt, draw=ink},
+  darr/.style={arr, dashed},
+  lab/.style={font=\tiny, align=center, text=ink},
+}
+\pgfplotsset{every axis/.append style={font=\scriptsize, tick label style={font=\tiny}, label style={font=\scriptsize},
+    legend style={font=\tiny, draw=none, fill=none}, axis line style={draw=greyd}, tick style={draw=greyd},
+    ymajorgrids, grid style={draw=greylt}, axis x line*=bottom, axis y line*=left,
+    legend image code/.code={\fill[#1] (0cm,-0.07cm) rectangle (0.28cm,0.07cm);}}}
+% Scale only over-wide TikZ diagrams to the BracU thesis text width.
+\BeforeBeginEnvironment{tikzpicture}{\begin{adjustbox}{max width=\textwidth}}
+\AfterEndEnvironment{tikzpicture}{\end{adjustbox}}
+
+\usepackage[backend=biber,style=ieee,sorting=ynt]{biblatex}
+\addbibresource{bibliography/references.bib}
+\AtBeginBibliography{\setlength{\emergencystretch}{10em}}
+
+\begin{document}
+\thispagestyle{empty}
+\input{core/titlepage}
+\cleardoublepage
+
+\pagenumbering{roman}
+\phantomsection\addcontentsline{toc}{chapter}{Declaration}\input{core/declaration}
+\phantomsection\addcontentsline{toc}{chapter}{Approval}\input{core/approval}
+\phantomsection\addcontentsline{toc}{chapter}{Abstract}\input{core/abstract}
+\phantomsection\addcontentsline{toc}{chapter}{Acknowledgement}\input{core/acknowledgement}
+
+\renewcommand{\contentsname}{Table of Contents}
+\tableofcontents\clearpage
+\listoffigures\clearpage
+\listoftables\clearpage
+\input{core/nomenclature}
+
+\pagenumbering{arabic}
+\chapter{Introduction}
+\input{chapters/chapter_1}
+
+\chapter{Literature Review}
+\input{chapters/chapter_2}
+
+\chapter{Requirements, Impacts and Constraints}
+\input{chapters/chapter_3}
+
+\chapter{Proposed Methodology}
+\input{chapters/chapter_4}
+
+\phantomsection
+\printbibliography[heading=bibintoc,title={Bibliography}]
+\end{document}

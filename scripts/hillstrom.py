@@ -25,6 +25,7 @@ import numpy as np
 import pandas as pd
 
 import abtrust as ab
+from abtrust.provenance import write_analysis_manifest
 from abtrust.report import md_table
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -191,6 +192,15 @@ def main() -> None:
     md, readout = analyze_hillstrom(df)
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(md, encoding="utf-8")
+    write_analysis_manifest(Path(args.out).with_suffix(".manifest.json"), data_kind="real_data",
+                            input_path=args.csv or CACHE, settings={
+                                "alpha": readout.alpha, "correction": readout.correction,
+                                "expected_split": dict(zip(readout.arm_counts, readout.srm.expected_ratios, strict=True)),
+                                "covariates": ["history", "recency"],
+                                "primary": "visit", "unit_ids_verified": readout.unit_verified,
+                                "guardrails_configured": False,
+                                "comparison_families": {"control_contrasts": 8, "exploratory_pairwise": 4,
+                                                        "exploratory_subgroups": 8}})
     print(readout.srm.summary())
     print(readout.decision())
     print(f"wrote {args.out}")
